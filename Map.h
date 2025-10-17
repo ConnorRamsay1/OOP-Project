@@ -3,10 +3,11 @@
 
 class Map{
     private:
-    const int screenWidth = 800;
-    const int screenHeight = 450;
+    const int screenWidth;
+    const int screenHeight;
     public:
     Map(const int screenWidth, const int screenHeight);
+    void Draw();
 };
 
 #endif

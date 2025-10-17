@@ -4,7 +4,10 @@
 
 class control{
     protected:
-    Map& map;
+    Map _Map;
+    public:
+    control(int width, int height);
+    void Run_Map();
 
 };
 

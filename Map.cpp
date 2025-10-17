@@ -1,8 +1,15 @@
 #include "Map.h"
 #include "raylib.h"
 
-Map::Map(const int screenWidth, const int screenHeight){
-     InitWindow(screenWidth, screenHeight, "raylib [core] example - input keys");
+Map::Map(const int screenWidth, const int screenHeight)
+     : screenWidth(screenWidth), screenHeight(screenHeight){
+     InitWindow(screenWidth, screenHeight, "Snake");
      SetTargetFPS(60);
-     CloseWindow();
+}
+
+void Map::Draw(){
+     BeginDrawing();
+     ClearBackground(RAYWHITE);
+     DrawText("Snake game window!", 650, 200, 35, LIGHTGRAY);
+     EndDrawing();
 }
