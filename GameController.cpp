@@ -1,17 +1,17 @@
-#include "GameController.h"
 
-#include <raymath.h>
 
+// GameController Implementation File
 #include <deque>
 #include <iostream>
 
+#include "GameController.h"
 #include "Food.h"
 #include "Snake.h"
 #include "raylib.h"
 
 using namespace std;
 
-// Contructors
+// Contructors----------------------------------------------------------------------------------------------
 GameController::GameController() {
   Snake snake;
   Food food;
@@ -22,8 +22,8 @@ GameController::GameController() {
   running = true;
   score = 0;
 }
-
-GameController::GameController(int score, Snake snake, Food food, bool running) {
+GameController::GameController(int score, Snake snake, Food food,
+                               bool running) {
   this->score = score;
   this->snake = snake;
   this->food = food;
@@ -36,17 +36,39 @@ GameController::GameController(int score, Snake snake, Food food, bool running) 
   cellSize = 30;
 }
 
-// Behaviours
+// Behaviours--------------------------------------------------------------------------------------------
+
+
+// Getters
 int GameController::getcellNum() { return cellNum; }
 int GameController::getCellSize() { return cellSize; }
+int GameController::getScore() { return score; }
+float GameController::getInputCooldown() { return inputCooldown; }
+double GameController::getLastInputTime() { return lastInputTime; }
 
-int GameController:: getScore(){ return score;}
-
-void GameController:: setScore(int score){
-    this-> score = score;
-    return;
+//Setters
+void GameController::setScore(int score) {
+  this->score = score;
+  return;
+}
+void GameController::setCellSize(int size) {
+  this->cellSize = size;
+  return;
+}
+void GameController::setCellNum(int num) {
+  this->cellNum = num;
+  return;
+}
+void GameController::setInputCooldown(float coolDown) {
+  this->inputCooldown = coolDown;
+  return;
+}
+double GameController::setLastInputTime(double input) {
+  this->lastInputTime = input;
+  return;
 }
 
+//Other Functions
 void GameController::draw(int cellSize) {
   food.draw(cellSize);
   snake.draw(cellSize);
@@ -86,7 +108,7 @@ void GameController::checkCollisionWithFood() {
   }
 }
 
-void GameController::HandleInput(Vector2 &direction) {
+void GameController::HandleInput(Vector2& direction) {
   double currentTime = GetTime();  // stores last time a key was pressed
   // Only accept input if cooldown time has passed
   if (currentTime - lastInputTime >= inputCooldown) {
@@ -124,3 +146,5 @@ void GameController::checkCollisionWithHead() {
   }
   return;
 }
+
+//--------------------------------------------------------------------------------------------------------

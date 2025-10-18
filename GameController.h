@@ -3,49 +3,62 @@
 #define GAMECONTROLLER_H
 #include <deque>
 #include <iostream>
-#include "raylib.h"
+
 #include "Food.h"
 #include "Snake.h"
+#include "raylib.h"
 
 using namespace std;
 
 class GameController {
  private:
+  // Private
+  // Attributes---------------------------------------------------------------------------------
   int cellSize;
   int cellNum;
   float inputCooldown;
   double lastInputTime;
   int score;
 
+  // Public
+  // Attributes---------------------------------------------------------------------------------
  public:
-  // Attributes
   Snake snake;
   Food food;
   bool running;
 
-  // Contructors
+  // Contructors--------------------------------------------------------------------------------------
   GameController();
   GameController(int score, Snake snake, Food food, bool running);
 
-  // Behaviors
+  // Behaviors-----------------------------------------------------------------------------------------
+  // Getters
   int getScore();
   int getCellSize();
   int getcellNum();
+  float getInputCooldown();
+  double getLastInputTime();
+
+  // Setters--------------------------------------------------------------------------------------------
   void setScore(int score);
-  
-  void draw(int cellSize);
+  void setCellSize(int size);
+  void setCellNum(int num);
+  void setInputCooldown(float coolDown);
+  double setLastInputTime(double input);
 
-  void Update();
-
+  // Other
+  // Functions----------------------------------------------------------------------------------------
+  // Collisions
   void checkCollisionWithEdges(int cellCount);
-
-  void GameOver(int cellNum);
-
+  void checkCollisionWithHead();
   void checkCollisionWithFood();
 
-  void HandleInput(Vector2 &direction);
+  // Input Handling & User Interface
 
-  void checkCollisionWithHead();
+  void draw(int cellSize);
+  void Update();
+  void HandleInput(Vector2& direction);
+  void GameOver(int cellNum);
 };
 
 #endif

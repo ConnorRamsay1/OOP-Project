@@ -1,4 +1,5 @@
-
+// Main Game Loop
+ 
 #include "raylib.h"
 #include <deque>
 #include <iostream>
@@ -54,18 +55,15 @@ cout << "Game loading...." << endl;
         Vector2 tempDirection = game.snake.getDirection();
         game.HandleInput(tempDirection);
 
-        
-
         // Clears old Background and resets colour to green
         ClearBackground(green);
    
 
-        
         // Draw Title and Score
         DrawText("SNAKE GAME", 20, 40, 20, darkGreen);
         DrawText(TextFormat("%i", game.getScore()), 40, 40, 40, darkGreen);
 
-        game.draw(game.getCellSize());
+        game.draw(game.getCellSize()); // Draws snake and Consumables
         EndDrawing();
     }
 

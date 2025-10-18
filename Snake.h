@@ -3,43 +3,48 @@
 #ifndef SNAKE_H
 #define SNAKE_H
 
+#include <deque>
 #include <iostream>
 #include "raylib.h"
-#include <deque>
 
 using namespace std;
 
-class Snake{
+class Snake {
+  // Private
+  // Attributes---------------------------------------------------------------------------------
+ private:
+  deque<Vector2> body;
+  Vector2 direction;
+  bool addSegment;
+  Color color;
+  
+ public:
 
-    private:
-    // Snake Attributes
-    deque<Vector2> body;
-    Vector2 direction;
-    bool addSegment;
-    Color color;
+ // Contructors------------------------------------------------------------------------------------------
+  Snake(deque<Vector2> body, Vector2 direction, bool addSegment, Color color);
+  Snake();
 
-    public:
-    Snake(deque<Vector2> body, Vector2 direction, bool addSegment, Color color);
-    Snake();
+  // Behaviours----------------------------------------------------------------------------------------------
+  // Getters
+  Vector2 getDirection();
+  bool getAddSegment();
+  Color getColor();
+  const deque<Vector2>& getBody();
 
+  // Setters
+  void setColor(Color color);
+  void setAddSegment(bool addSegment);
+  void setDirection(Vector2 direction);
+  void setBody(deque<Vector2> body);
 
+  // User
+  // Interface----------------------------------------------------------------------------------------------
+  void draw(int cellSize);
+  void Update();
+  void Reset();
 
-    // Snake Behaviour
-    Vector2 getDirection();
-    const deque<Vector2>& getBody(); //-----------------------------------------------
-    bool getAddSegment();
-    Color getColor();
-    void setColor(Color color);
-    void setAddSegment(bool addSegment);
-    void setDirection(Vector2 direction);
-    void setBody(deque<Vector2> body);
-
-    void draw(int cellSize);
-    void Update();
-    void Reset();
-
-    ~Snake();
-
+  // Destructor----------------------------------------------------------------------------------------------
+  ~Snake();
 };
 
-#endif 
+#endif

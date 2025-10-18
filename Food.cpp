@@ -5,17 +5,12 @@
 #include <iostream>
 
 
-
 using namespace std;
 
-// Constructor
+// Constructors------------------------------------------------------------------------------------
 Food::Food(Color color, Vector2 position) {
   this->position = position;
   this-> color = color;
-  // Image image =loadImage("PUT PATH OF IMAGE");
-  // texture = LoadTextureFromImage(image);
-  //  unloadImage(image) -------------------> If we want to import images into
-  //  our game
 }
 
 Food::Food(){
@@ -23,13 +18,9 @@ Food::Food(){
     color = { 255, 0, 0, 255 };
 }
 
-// Behaviours
-    void Food::setColor(Color color){
-        this-> color = color;
-    }
-    void Food::setPosition(Vector2 position){
-        this-> position = position;
-    }
+// Behaviours--------------------------------------------------------------------------------------
+
+//Getters--------------------------------------------------------------------------------------
     Color Food::getColor(){
         return color;
     }
@@ -37,6 +28,18 @@ Food::Food(){
         return position;
     }
 
+
+//Setters--------------------------------------------------------------------------------------
+    void Food::setColor(Color color){
+        this-> color = color;
+    }
+    void Food::setPosition(Vector2 position){
+        this-> position = position;
+    }
+
+
+
+//User Interface & Interaction
 
 void Food::draw(int cellSize) {
   DrawRectangle(position.x * cellSize, position.y * cellSize, cellSize,
