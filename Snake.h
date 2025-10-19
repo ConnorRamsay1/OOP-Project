@@ -17,11 +17,18 @@ class Snake {
   Vector2 direction;
   bool addSegment;
   Color color;
-  
- public:
 
- // Contructors------------------------------------------------------------------------------------------
-  Snake(deque<Vector2> body, Vector2 direction, bool addSegment, Color color);
+  // For slowed Effect
+  bool isSlowed;
+  double slowEffectTime;
+  float normalSpeed;
+  float slowedSpeed;
+
+ public:
+  // Contructors------------------------------------------------------------------------------------------
+  Snake(deque<Vector2> body, Vector2 direction, bool addSegment, Color color,
+        bool isSlowed, double slowEffectTime, float normalSpeed,
+        float slowedSpeed);
   Snake();
 
   // Behaviours----------------------------------------------------------------------------------------------
@@ -30,18 +37,24 @@ class Snake {
   bool getAddSegment();
   Color getColor();
   const deque<Vector2>& getBody();
+  bool getIsSlowed();
 
   // Setters
   void setColor(Color color);
   void setAddSegment(bool addSegment);
   void setDirection(Vector2 direction);
   void setBody(deque<Vector2> body);
+  void setIsSlowed(bool isSlowed);
 
   // User
   // Interface----------------------------------------------------------------------------------------------
   void draw(int cellSize);
   void Update();
   void Reset();
+
+  // Effects from Slow Apple
+  void applySlowEffect(float duration);
+  void updateSlowApple();
 
   // Destructor----------------------------------------------------------------------------------------------
   ~Snake();

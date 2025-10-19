@@ -1,11 +1,10 @@
-
-
 // GameController Implementation File
+
 #include <deque>
 #include <iostream>
+#include <vector>
 
 #include "GameController.h"
-#include "Food.h"
 #include "Snake.h"
 #include "raylib.h"
 
@@ -14,22 +13,37 @@ using namespace std;
 // Contructors----------------------------------------------------------------------------------------------
 GameController::GameController() {
   Snake snake;
-  Food food;
+  IncreaseLengthApple lengthApple;
+  SlowingApple slowApple;
   lastInputTime = 0;
-  inputCooldown = 0.135f;
+  inputCooldown = 0.1f;
   cellNum = 25;
   cellSize = 30;
-  running = true;
+  isRunning = true;
   score = 0;
+
+  // Apple Spawning
+  // Max no. of Apples
+  maxLengthApples = 3;
+  maxSlowApples = 2;
+  lastSpawnTime = 0;
+  spawnRate = 3.0f;
+
+  // Spawn Multiple Apples
+  for (int i = 0; i < maxLengthApples; i++) {
+    spawnLengthApple();
+  }
+  for (int i = 0; i < maxSlowApples; i++) {
+    spawnSlowApple();
+  }
 }
-GameController::GameController(int score, Snake snake, Food food,
-                               bool running) {
+
+GameController::GameController(int score, Snake snake, bool isRunning) {
   this->score = score;
   this->snake = snake;
-  this->food = food;
   this->inputCooldown = inputCooldown;
   this->lastInputTime = lastInputTime;
-  this->running = running;
+  this->isRunning = isRunning;
   lastInputTime = 0;
   inputCooldown = 0.135f;
   cellNum = 25;
@@ -38,15 +52,26 @@ GameController::GameController(int score, Snake snake, Food food,
 
 // Behaviours--------------------------------------------------------------------------------------------
 
-
 // Getters
 int GameController::getcellNum() { return cellNum; }
 int GameController::getCellSize() { return cellSize; }
 int GameController::getScore() { return score; }
 float GameController::getInputCooldown() { return inputCooldown; }
 double GameController::getLastInputTime() { return lastInputTime; }
+bool GameController::getisRunning() { return isRunning; }
+Snake GameController::getSnake() { return snake; }
 
-//Setters
+// Getters for SpawnRate
+int GameController::getMaxLengthApples() { return maxLengthApples; }
+int GameController::getMaxSlowApples() { return maxSlowApples; }
+double GameController::getLastSpawnTime() { return lastSpawnTime; }
+float GameController::getSpawnRate() { return spawnRate; }
+vector<SlowingApple*> GameController::getSlowApples() { return slowApples; }
+vector<IncreaseLengthApple*> GameController::getLengthApples() {
+  return lengthApples;
+}
+
+// Setters
 void GameController::setScore(int score) {
   this->score = score;
   return;
@@ -63,51 +88,46 @@ void GameController::setInputCooldown(float coolDown) {
   this->inputCooldown = coolDown;
   return;
 }
-double GameController::setLastInputTime(double input) {
+void GameController::setLastInputTime(double input) {
   this->lastInputTime = input;
   return;
 }
-
-//Other Functions
-void GameController::draw(int cellSize) {
-  food.draw(cellSize);
-  snake.draw(cellSize);
+void GameController::setisRunning(bool isRunning) {
+  this->isRunning = isRunning;
+}
+void GameController::setSnake(Snake snake) {
+  this->snake = snake;
+  return;
 }
 
-void GameController::Update() {
-  if (running == true) {
-    snake.Update();
-    checkCollisionWithFood();
-    checkCollisionWithEdges(cellNum);
-    checkCollisionWithHead();
-  }
+// Setters for SpawnRate
+void GameController::setLengthApples(
+    vector<IncreaseLengthApple*> lengthApples) {
+  this->lengthApples = lengthApples;
+  return;
+}
+void GameController::setSlowApples(vector<SlowingApple*> SlowApples) {
+  this->slowApples = slowApples;
+  return;
+}
+void GameController::setLastSpawnTime(double lastSpawnTime) {
+  this->lastSpawnTime = lastSpawnTime;
+  return;
+}
+void GameController::setSpawnRate(float spawnRate) {
+  this->spawnRate = spawnRate;
+  return;
+}
+void GameController::setMaxLengthApples(int maxLengthApples) {
+  this->maxLengthApples = maxLengthApples;
+  return;
+}
+void GameController::setMaxSlowApples(int maxSlowApples) {
+  this->maxSlowApples = maxSlowApples;
+  return;
 }
 
-void GameController::checkCollisionWithEdges(int cellNum) {
-  if (snake.getBody()[0].x == cellNum || snake.getBody()[0].x == -1) {
-    GameOver(cellNum);
-  }
-  if (snake.getBody()[0].y == cellNum || snake.getBody()[0].y == -1) {
-    GameOver(cellNum);
-  }
-}
-
-void GameController::GameOver(int cellNum) {
-  snake.Reset();
-  food.GenerateRandomPos(cellNum, snake);
-  running = false;
-  score = 0;
-}
-
-void GameController::checkCollisionWithFood() {
-  if ((snake.getBody()[0].x == food.getPosition().x) &&
-      (snake.getBody()[0].y == food.getPosition().y)) {
-    food.setPosition(food.GenerateRandomPos(cellNum, snake));
-    snake.setAddSegment(true);
-    score = score + 1;
-  }
-}
-
+// Managing Inputs and General Game Properties
 void GameController::HandleInput(Vector2& direction) {
   double currentTime = GetTime();  // stores last time a key was pressed
   // Only accept input if cooldown time has passed
@@ -116,26 +136,90 @@ void GameController::HandleInput(Vector2& direction) {
       direction = {0, -1};
       snake.setDirection(direction);
       lastInputTime = currentTime;  // reset cooldown timer
-      running = true;
+      isRunning = true;
     } else if (IsKeyPressed(KEY_DOWN) && direction.y != -1) {
       direction = {0, 1};
       snake.setDirection(direction);
       lastInputTime = currentTime;
-      running = true;
+      isRunning = true;
     } else if (IsKeyPressed(KEY_LEFT) && direction.x != 1) {
       direction = {-1, 0};
       snake.setDirection(direction);
       lastInputTime = currentTime;
-      running = true;
+      isRunning = true;
     } else if (IsKeyPressed(KEY_RIGHT) && direction.x != -1) {
       direction = {1, 0};
       snake.setDirection(direction);
       lastInputTime = currentTime;
-      running = true;
+      isRunning = true;
     }
   }
 }
 
+void GameController::draw(int cellSize) {
+  snake.draw(cellSize);
+  for (int i = 0; i < lengthApples.size(); i++) {
+    lengthApples[i]->draw(cellSize);
+  }
+  for (int i = 0; i < slowApples.size(); i++) {
+    slowApples[i]->draw(cellSize);
+  }
+}
+
+void GameController::Update() {
+  if (isRunning == true) {
+    snake.Update();
+    snake.updateSlowApple();
+    checkCollisionWithLengthApple();
+    checkCollisionWithSlowApple();
+    checkCollisionWithEdges(cellNum);
+    checkCollisionWithHead();
+}
+}
+
+void GameController::GameOver(int cellNum) {
+  snake.Reset();
+  removeApples();
+  // Spawn Apples
+  spawnLengthApple();
+  spawnSlowApple();
+
+  isRunning = false;
+  score = 0;
+  lastSpawnTime = GetTime();  // Resets spawn timer
+}
+
+// Managing Collisions
+void GameController::checkCollisionWithLengthApple() {
+  for (int i = 0; i < lengthApples.size(); i++) {
+    if ((snake.getBody()[0].x == lengthApples[i]->getPosition().x) &&
+        (snake.getBody()[0].y == lengthApples[i]->getPosition().y)) {
+      lengthApples[i]->setPosition(
+          lengthApples[i]->GenerateRandomPos(cellNum, snake));
+      snake.setAddSegment(true);
+      score = score + 1;
+    }
+  }
+}
+void GameController::checkCollisionWithSlowApple() {
+  for (int i = 0; i < slowApples.size(); i++) {
+    if ((snake.getBody()[0].x == slowApples[i]->getPosition().x) &&
+        (snake.getBody()[0].y == slowApples[i]->getPosition().y)) {
+      slowApples[i]->setPosition(
+          slowApples[i]->GenerateRandomPos(cellNum, snake));
+      snake.applySlowEffect(3.0f); //Changes length of effect
+
+      // Delete slowApple
+      delete slowApples[i];
+      // removes pointer and shifts remaining elements to fill the gap
+      slowApples.erase(slowApples.begin() + i);
+
+      // Spawn a new apple
+      spawnSlowApple();
+      break;
+    }
+  }
+}
 void GameController::checkCollisionWithHead() {
   for (int i = 1; i < snake.getBody().size(); i++) {
     if ((snake.getBody()[0].x == snake.getBody()[i].x) &&
@@ -146,5 +230,101 @@ void GameController::checkCollisionWithHead() {
   }
   return;
 }
+void GameController::checkCollisionWithEdges(int cellNum) {
+  if (snake.getBody()[0].x == cellNum || snake.getBody()[0].x == -1) {
+    GameOver(cellNum);
+  }
+  if (snake.getBody()[0].y == cellNum || snake.getBody()[0].y == -1) {
+    GameOver(cellNum);
+  }
+}
 
-//--------------------------------------------------------------------------------------------------------
+// Spawning & Removing  Apples
+void GameController::spawnLengthApple() {
+  if (lengthApples.size() >= maxLengthApples) {
+    return;  // Already at max amount
+  } else {
+    IncreaseLengthApple* newApple =
+        new IncreaseLengthApple();  // Dynamically allocates
+    Vector2 newApplePosition = newApple->GenerateRandomPos(cellNum, snake);
+    bool validPosition = false;
+    while (!validPosition) {
+      validPosition = true;
+      for (int i = 0; i < lengthApples.size();
+           i++) {  // Check valid spawn position against other length apples
+        if ((newApplePosition.x == lengthApples[i]->getPosition().x) &&
+            (newApplePosition.y == lengthApples[i]->getPosition().y)) {
+          validPosition = false;
+          newApplePosition = newApple->GenerateRandomPos(cellNum, snake);
+          break;
+        }
+      }
+      for (int i = 0; i < slowApples.size();
+           i++) {  // Check valid spawn position against other slow apples
+        if ((newApplePosition.x == slowApples[i]->getPosition().x) &&
+            (newApplePosition.y == slowApples[i]->getPosition().y)) {
+          validPosition = false;
+          newApplePosition = newApple->GenerateRandomPos(cellNum, snake);
+          break;
+        }
+      }
+    }
+    newApple->setPosition(newApplePosition);
+    lengthApples.push_back(newApple);  // Adds new apple to lengthApples vector
+  }
+  return;
+}
+void GameController::spawnSlowApple() {
+  if (slowApples.size() >= maxSlowApples) {
+    return;  // Already at max amount
+  } else {
+    SlowingApple* newApple = new SlowingApple();
+    Vector2 newApplePosition = newApple->GenerateRandomPos(cellNum, snake);
+    bool validPosition = false;
+    int index = 0;  // Prevents infinite loop
+
+    while (!validPosition && index < 100) {
+      validPosition = true;
+
+      // Check valid spawn position against other length apples
+      for (int i = 0; i < lengthApples.size(); i++) {
+        if ((newApplePosition.x == lengthApples[i]->getPosition().x) &&
+            (newApplePosition.y == lengthApples[i]->getPosition().y)) {
+          validPosition = false;
+          newApplePosition = newApple->GenerateRandomPos(cellNum, snake);
+          break;
+        }
+      }
+      // Check valid spawn position against other slow apples
+      for (int i = 0; i < slowApples.size(); i++) {
+        if ((newApplePosition.x == slowApples[i]->getPosition().x) &&
+            (newApplePosition.y == slowApples[i]->getPosition().y)) {
+          validPosition = false;
+          newApplePosition = newApple->GenerateRandomPos(cellNum, snake);
+          break;
+        }
+      }
+      index = index + 1;
+    }
+    newApple->setPosition(newApplePosition);
+    slowApples.push_back(newApple);  // Adds new apple to lengthApples vector
+  }
+  return;
+}
+
+void GameController::removeApples() {
+  // Delete LengthApples
+  for (int i = 0; i < lengthApples.size(); i++) {
+    delete lengthApples[i];
+
+    lengthApples.clear();  // clears vector/ empties container
+  }
+  // Delete SlowingApples
+  for (int i = 0; i < slowApples.size(); i++) {
+    delete slowApples[i];
+    slowApples.clear();
+  }
+}
+
+// Destructor--------------------------------------------------------------------------------------------------------
+GameController::~GameController() { removeApples(); }

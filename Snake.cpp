@@ -1,23 +1,34 @@
-#include "Snake.h"
+//Snake Implementation File
 
 #include <deque>
 #include <iostream>
+
+#include "Snake.h"
 
 using namespace std;
 
 // Constructors----------------------------------------------------------------------------------------------
 Snake::Snake(deque<Vector2> body, Vector2 direction, bool addSegment,
-             Color color) {
+             Color color, bool isSlowed, double slowEffectTime,
+             float normalSpeed, float slowedSpeed) {
   this->body = body;
   this->direction = direction;
   this->addSegment = addSegment;
   this->color = color;
+  this->isSlowed = isSlowed;
+  this->slowEffectTime = slowEffectTime;
+  this->normalSpeed = normalSpeed;
+  this->slowedSpeed = slowedSpeed;
 }
 Snake::Snake() {
   this->body = {Vector2{6, 9}, Vector2{5, 9}, Vector2{4, 9}};
   this->direction = {1, 0};
   this->addSegment = false;
-  this->color = {43, 51, 24, 255};
+  this->color = {0, 100, 0, 255};
+  this->isSlowed = false;
+  this->slowEffectTime = 0;
+  this->normalSpeed = 0.1f;
+  this->slowedSpeed = 0.3f;
 }
 
 // Behaviours----------------------------------------------------------------------------------------------
@@ -26,6 +37,7 @@ Color Snake::getColor() { return color; }
 bool Snake::getAddSegment() { return addSegment; }
 Vector2 Snake::getDirection() { return direction; }
 const deque<Vector2>& Snake::getBody() { return body; }
+bool Snake::getIsSlowed() { return isSlowed; }
 
 // Setters
 void Snake::setColor(Color color) {
@@ -44,14 +56,31 @@ void Snake::setBody(deque<Vector2> body) {
   this->body = body;
   return;
 }
-
-// User Interface and Interactions----------------------------------------------------------------------------
+void Snake::setIsSlowed(bool isSlowed) {
+  this->isSlowed = isSlowed;
+  return;
+}
+// User Interface and
+// Interactions----------------------------------------------------------------------------
 
 void Snake::draw(int cellSize) {
   for (int i = 0; i < body.size(); i++) {
     int x = body[i].x;
     int y = body[i].y;
-    DrawRectangle(x * cellSize, y * cellSize, cellSize, cellSize, color);
+    if (i == 0 && !isSlowed) {  // Changes colour of head
+      color = {0, 150, 0, 255};
+      DrawRectangle(x * cellSize, y * cellSize, cellSize, cellSize, color);
+    } else if (i == 0 && isSlowed) {
+      color = {70, 100, 255, 255};
+      DrawRectangle(x * cellSize, y * cellSize, cellSize, cellSize, color);
+    } else {
+      if (!isSlowed) {  // Changes Color of Snake
+        color = {0, 100, 0, 255};
+      } else {
+        color = {50, 60, 90, 255};
+      }
+      DrawRectangle(x * cellSize, y * cellSize, cellSize, cellSize, color);
+    }
   }
 }
 
@@ -64,12 +93,24 @@ void Snake::Update() {
     body.pop_back();
     body.push_front(newHead);
   }
+
 }
 
 void Snake::Reset() {
   body = {Vector2{6, 9}, Vector2{5, 9}, Vector2{4, 9}};
   direction = {1, 0};
+  isSlowed = false;
 }
 
-// Descuctor----------------------------------------------------------------------------------------------
+// Effect from Slow Apple
+void Snake::applySlowEffect(float duration) {
+  isSlowed = true;
+  slowEffectTime = GetTime() + duration;
+}
+void Snake::updateSlowApple() {
+  if (isSlowed && GetTime() >= slowEffectTime) {
+    isSlowed = false;
+  }
+}
+// Destructor----------------------------------------------------------------------------------------------
 Snake::~Snake() {}

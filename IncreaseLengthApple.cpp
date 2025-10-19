@@ -1,19 +1,23 @@
+//Increase Length Apple HEADER FILE
 
-#include "Food.h"
-#include "Snake.h"
 #include <deque>
 #include <iostream>
 
+#include "raylib.h"
+#include "Fruit.h"
+#include "Snake.h"
+#include "IncreaseLengthApple.h"
+
+class SlowingApple; //Just tells the compiler SlowingApple exists
 
 using namespace std;
 
 // Constructors------------------------------------------------------------------------------------
-Food::Food(Color color, Vector2 position) {
+IncreaseLengthApple::IncreaseLengthApple(Color color, Vector2 position) {
   this->position = position;
   this-> color = color;
 }
-
-Food::Food(){
+IncreaseLengthApple::IncreaseLengthApple(){
     position = {6,6};
     color = { 255, 0, 0, 255 };
 }
@@ -21,51 +25,36 @@ Food::Food(){
 // Behaviours--------------------------------------------------------------------------------------
 
 //Getters--------------------------------------------------------------------------------------
-    Color Food::getColor(){
+    Color IncreaseLengthApple::getColor(){
         return color;
     }
-    Vector2 Food::getPosition(){
+    Vector2 IncreaseLengthApple::getPosition(){
         return position;
     }
 
 
 //Setters--------------------------------------------------------------------------------------
-    void Food::setColor(Color color){
+    void IncreaseLengthApple::setColor(Color color){
         this-> color = color;
     }
-    void Food::setPosition(Vector2 position){
+    void IncreaseLengthApple::setPosition(Vector2 position){
         this-> position = position;
     }
 
 
 
-//User Interface & Interaction
+//Drawing and Setting lengthApple's Position----------------------------------------------------------------------------
 
-void Food::draw(int cellSize) {
+void IncreaseLengthApple::draw(int cellSize) {
   DrawRectangle(position.x * cellSize, position.y * cellSize, cellSize,
                 cellSize, getColor());
 }
 
-bool Food::elementInDeque(Vector2 position, deque<Vector2> deque) {
-  for (int i = 0; i < deque.size(); i++) {
-    if((deque[i].x == position.x) && (deque[i].y == position.y)){
-      return true;
-    }
-  }
-  return false;
-}
-
-Vector2 Food::GenerateRandomCell(int cellNum) {
-  float x = GetRandomValue(0, cellNum - 1);
-  float y = GetRandomValue(0, cellNum - 1);
-  return Vector2{x, y};
-}
-
-Vector2 Food::GenerateRandomPos(int cellNum, Snake snake) {
+Vector2 IncreaseLengthApple::GenerateRandomPos(int cellNum, Snake snake) {
   Vector2 position = GenerateRandomCell(cellNum);
-  while (elementInDeque(position, snake.getBody())) {
+  deque<Vector2> emptyDeque;
+  while(elementInDeque(position, snake.getBody(), emptyDeque)){
     position = GenerateRandomCell(cellNum);
   }
   return position;
 }
-
