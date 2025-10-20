@@ -17,6 +17,7 @@ class Snake {
   Vector2 direction;
   bool addSegment;
   Color color;
+  bool PushBack;
 
   // For slowed Effect
   bool isSlowed;

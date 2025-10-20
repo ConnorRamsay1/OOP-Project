@@ -64,12 +64,12 @@ Snake GameController::getSnake() { return snake; }
 // Getters for SpawnRate
 int GameController::getMaxLengthApples() { return maxLengthApples; }
 int GameController::getMaxSlowApples() { return maxSlowApples; }
+int GameController::getMaxDecreaseBanana() { return maxDecreaseBanana; }
 double GameController::getLastSpawnTime() { return lastSpawnTime; }
 float GameController::getSpawnRate() { return spawnRate; }
 vector<SlowingApple*> GameController::getSlowApples() { return slowApples; }
-vector<IncreaseLengthApple*> GameController::getLengthApples() {
-  return lengthApples;
-}
+vector<IncreaseLengthApple*> GameController::getLengthApples() { return lengthApples; }
+vector<DecreaseLengthBanana*> GameController::getDecreaseBananas() { return DecreaseBananas; }
 
 // Setters
 void GameController::setScore(int score) {
@@ -110,6 +110,10 @@ void GameController::setSlowApples(vector<SlowingApple*> SlowApples) {
   this->slowApples = slowApples;
   return;
 }
+ void GameController::setDecreaseBananas(vector<DecreaseLengthBanana*> DecreaseBananas){
+  this->DecreaseBananas = DecreaseBananas;
+ }
+
 void GameController::setLastSpawnTime(double lastSpawnTime) {
   this->lastSpawnTime = lastSpawnTime;
   return;
@@ -164,6 +168,9 @@ void GameController::draw(int cellSize) {
   for (int i = 0; i < slowApples.size(); i++) {
     slowApples[i]->draw(cellSize);
   }
+  for(int i=0; i < DecreaseBananas.size(); i++){
+    DecreaseBananas[i]->draw(cellSize);
+  }
 }
 
 void GameController::Update() {
@@ -172,6 +179,7 @@ void GameController::Update() {
     snake.updateSlowApple();
     checkCollisionWithLengthApple();
     checkCollisionWithSlowApple();
+    checkCollisionWithDecreaseBanana();
     checkCollisionWithEdges(cellNum);
     checkCollisionWithHead();
 }
@@ -183,11 +191,18 @@ void GameController::GameOver(int cellNum) {
   // Spawn Apples
   spawnLengthApple();
   spawnSlowApple();
+  spawnDecreaseBanana();
 
   isRunning = false;
   score = 0;
   lastSpawnTime = GetTime();  // Resets spawn timer
 }
+
+//Delete snake part
+void GameController::DecreaseSnake(int _DecreaseAmount){
+  
+}
+
 
 // Managing Collisions
 void GameController::checkCollisionWithLengthApple() {
@@ -216,6 +231,27 @@ void GameController::checkCollisionWithSlowApple() {
 
       // Spawn a new apple
       spawnSlowApple();
+      break;
+    }
+  }
+}
+  void GameController::checkCollisionWithDecreaseBanana() {
+     for (int i = 0; i < DecreaseBananas.size(); i++) {
+    if ((snake.getBody()[0].x == DecreaseBananas[i]->getPosition().x) &&
+        (snake.getBody()[0].y == DecreaseBananas[i]->getPosition().y)) {
+      DecreaseBananas[i]->setPosition(
+          DecreaseBananas[i]->GenerateRandomPos(cellNum, snake));
+        snake.setPushBack(true);
+        score++;
+      
+
+      // Delete slowApple
+      delete DecreaseBananas[i];
+      // removes pointer and shifts remaining elements to fill the gap
+      DecreaseBananas.erase(DecreaseBananas.begin() + i);
+
+      // Spawn a new apple
+      spawnDecreaseBanana();
       break;
     }
   }
@@ -250,8 +286,8 @@ void GameController::spawnLengthApple() {
     bool validPosition = false;
     while (!validPosition) {
       validPosition = true;
-      for (int i = 0; i < lengthApples.size();
-           i++) {  // Check valid spawn position against other length apples
+      for (int i = 0; i < lengthApples.size(); i++) { 
+         // Check valid spawn position against other length apples
         if ((newApplePosition.x == lengthApples[i]->getPosition().x) &&
             (newApplePosition.y == lengthApples[i]->getPosition().y)) {
           validPosition = false;
@@ -267,6 +303,15 @@ void GameController::spawnLengthApple() {
           newApplePosition = newApple->GenerateRandomPos(cellNum, snake);
           break;
         }
+      }
+       //check spawn aganist other Bananas
+      for(int i = 0; i < DecreaseBananas.size(); i++){
+        if((newApplePosition.x == DecreaseBananas[i]->getPosition().x) &&
+          (newApplePosition.y == DecreaseBananas[i]->getPosition().y)){
+            validPosition = false;
+          newApplePosition = newApple->GenerateRandomPos(cellNum, snake);
+          break;
+          }
       }
     }
     newApple->setPosition(newApplePosition);
@@ -304,10 +349,66 @@ void GameController::spawnSlowApple() {
           break;
         }
       }
+      //check spawn aganist other Bananas
+      for(int i = 0; i < DecreaseBananas.size(); i++){
+        if((newApplePosition.x == DecreaseBananas[i]->getPosition().x) &&
+          (newApplePosition.y == DecreaseBananas[i]->getPosition().y)){
+            validPosition = false;
+          newApplePosition = newApple->GenerateRandomPos(cellNum, snake);
+          break;
+          }
+      }
       index = index + 1;
     }
     newApple->setPosition(newApplePosition);
     slowApples.push_back(newApple);  // Adds new apple to lengthApples vector
+  }
+  return;
+}
+
+void GameController::spawnDecreaseBanana() {
+  if (DecreaseBananas.size() >= maxDecreaseBanana) {
+    return;  // Already at max amount
+  } else {
+    DecreaseLengthBanana* newBanana = new DecreaseLengthBanana();
+    Vector2 newBananaPosition = newBanana->GenerateRandomPos(cellNum, snake);
+    bool validPosition = false;
+    int index = 0;  // Prevents infinite loop
+
+    while (!validPosition && index < 100) {
+      validPosition = true;
+
+      // Check valid spawn position against other length apples
+      for (int i = 0; i < lengthApples.size(); i++) { // loop only checks through once no?
+        if ((newBananaPosition.x == lengthApples[i]->getPosition().x) &&
+            (newBananaPosition.y == lengthApples[i]->getPosition().y)) {
+          validPosition = false;
+          newBananaPosition = newBanana->GenerateRandomPos(cellNum, snake);
+          break;
+        }
+      }
+      // Check valid spawn position against other slow apples
+      for (int i = 0; i < slowApples.size(); i++) { 
+        if ((newBananaPosition.x == slowApples[i]->getPosition().x) &&
+            (newBananaPosition.y == slowApples[i]->getPosition().y)) {
+          validPosition = false;
+          newBananaPosition = newBanana->GenerateRandomPos(cellNum, snake);
+          break;
+        }
+      }
+       //check spawn aganist other Bananas
+      for(int i = 0; i < DecreaseBananas.size(); i++){
+        if((newBananaPosition.x == DecreaseBananas[i]->getPosition().x) &&
+          (newBananaPosition.y == DecreaseBananas[i]->getPosition().y)){
+            validPosition = false;
+          newBananaPosition = newBanana->GenerateRandomPos(cellNum, snake);
+          break;
+          }
+      }
+      index = index + 1;
+    }
+    newBanana->setPosition(newBananaPosition);
+    DecreaseBananas.push_back(newBanana);  // Adds new apple to lengthApples vector
   }
   return;
 }
@@ -325,6 +426,14 @@ void GameController::removeApples() {
     slowApples.clear();
   }
 }
+void GameController::removeBanana(){
+  // Delete LengthBanana
+  for (int i = 0; i < DecreaseBananas.size(); i++) {
+    delete lengthApples[i];
+
+    DecreaseBananas.clear();  // clears vector/ empties container
+  }
+}
 
 // Destructor--------------------------------------------------------------------------------------------------------
-GameController::~GameController() { removeApples(); }
+GameController::~GameController() { removeApples(); } // remove banana?

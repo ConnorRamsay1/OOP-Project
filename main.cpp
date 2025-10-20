@@ -73,6 +73,7 @@ int main(void) {
     // Draw game objects (snake and apples)
     game.draw(game.getCellSize());
 
+
     EndDrawing();
   }
 

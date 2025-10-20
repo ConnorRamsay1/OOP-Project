@@ -9,6 +9,7 @@
 
 #include "Fruit.h"
 #include "IncreaseLengthApple.h"
+#include "DecreaseLengthBanana.h"
 #include "SlowingApple.h"
 #include "Snake.h"
 #include "raylib.h"
@@ -19,8 +20,6 @@ class GameController {
  private:
   // Private
   // Attributes---------------------------------------------------------------------------------
-  int cellSize;
-  int cellNum;
   float inputCooldown;
   double lastInputTime;
   int score;
@@ -29,12 +28,19 @@ class GameController {
   Snake snake;
   vector<IncreaseLengthApple*> lengthApples;
   vector<SlowingApple*> slowApples;
+  vector<DecreaseLengthBanana*> DecreaseBananas;
 
   // Controls spawnRate of Apples
   int maxLengthApples;
   int maxSlowApples;
+  int maxDecreaseBanana;
   double lastSpawnTime;
   float spawnRate;
+
+
+  //Protected attributes
+  int cellSize;
+  int cellNum;
 
   // Public
   // Attributes---------------------------------------------------------------------------------
@@ -55,10 +61,12 @@ class GameController {
   Snake getSnake();
   vector<IncreaseLengthApple*> getLengthApples();
   vector<SlowingApple*> getSlowApples();
+  vector<DecreaseLengthBanana*> getDecreaseBananas();
 
   // Controls spawnRate of Apples
   int getMaxLengthApples();
   int getMaxSlowApples();
+  int getMaxDecreaseBanana();
   double getLastSpawnTime();
   float getSpawnRate();
 
@@ -74,6 +82,7 @@ class GameController {
   // Controls spawnRate of Apples
   void setLengthApples(vector<IncreaseLengthApple*> lengthApples);
   void setSlowApples(vector<SlowingApple*> SlowApples);
+  void setDecreaseBananas(vector<DecreaseLengthBanana*> DecreaseBananas);
   void setMaxLengthApples(int maxLengthApples);
   void setMaxSlowApples(int maxSlowApples);
   void setLastSpawnTime(double lastSpawnTime);
@@ -86,6 +95,7 @@ class GameController {
   void checkCollisionWithHead();
   void checkCollisionWithLengthApple();
   void checkCollisionWithSlowApple();
+  void checkCollisionWithDecreaseBanana();
 
   // Input Handling & User Interface
   void draw(int cellSize);
@@ -98,6 +108,11 @@ class GameController {
   void spawnSlowApple();
   void updateAppleSpawning();
   void removeApples();
+  void spawnDecreaseBanana();
+  void removeBanana();
+
+  //effect of decrease Banana
+  void DecreaseSnake(int _DecreaseAmount);
 
   // Destructor-----------------------------------------------------------------
   ~GameController();

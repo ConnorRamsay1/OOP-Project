@@ -38,6 +38,7 @@ bool Snake::getAddSegment() { return addSegment; }
 Vector2 Snake::getDirection() { return direction; }
 const deque<Vector2>& Snake::getBody() { return body; }
 bool Snake::getIsSlowed() { return isSlowed; }
+bool Snake::getPushBack() { return PushBack; }
 
 // Setters
 void Snake::setColor(Color color) {
@@ -46,6 +47,10 @@ void Snake::setColor(Color color) {
 }
 void Snake::setAddSegment(bool addSegment) {
   this->addSegment = addSegment;
+  return;
+}
+void Snake::setPushBack(bool PushBack){
+  this->PushBack = PushBack;
   return;
 }
 void Snake::setDirection(Vector2 direction) {
@@ -92,6 +97,10 @@ void Snake::Update() {
   } else {
     body.pop_back();
     body.push_front(newHead);
+  }
+  if(PushBack == true){
+    body.pop_back();
+    PushBack = false;
   }
 
 }
