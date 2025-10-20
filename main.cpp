@@ -6,6 +6,7 @@
 #include "Fruit.h"
 #include "GameController.h"
 #include "Snake.h"
+#include "TitlePage.h"
 #include "raylib.h"
 
 using namespace std;
@@ -25,58 +26,119 @@ float updateInterval;
 int main(void) {
   cout << "Game loading...." << endl;
 
+  // Create game window (25x25 grid, 30px cells = 750x750 window)
+  const int screenWidth = 750;
+  const int screenHeight = 750;
+  InitWindow(screenWidth, screenHeight, "Snake Game");
+  SetTargetFPS(60);
+
+  // Initialising Game State
+  GameState currentState = TITLE;
+  TitlePage titlePage(screenWidth, screenHeight);
   // Initialize game controller
   GameController game;
 
-  // Create game window (25x25 grid, 30px cells = 750x750 window)
-  InitWindow(game.getCellSize() * game.getcellNum(),
-             game.getCellSize() * game.getcellNum(), "Snake");
-  SetTargetFPS(60);
+  int finalScore = 0;
+  bool isHighScore = false;
 
   //===========================================================================
   // MAIN GAME LOOP
   //===========================================================================
   while (WindowShouldClose() == false) {
     BeginDrawing();
+    
+    if (currentState == TITLE) {
+      titlePage.drawTitleScreen();
+      currentState = titlePage.handleTitleInput(currentState);
 
-    // Adjust game speed based on slow effect
-    // Slowed: 0.3s between updates, Normal: 0.1s
-    if (game.getSnake().getIsSlowed()) {
-      updateInterval = 0.3f;
-    } else {
-      updateInterval = 0.1f;
+    } else if (currentState == RULES) {
+      titlePage.drawRulesScreen();
+      currentState = titlePage.handlePageInput(currentState);
+
+    } else if (currentState == SCOREBOARD) {
+      titlePage.drawScoreboardScreen();
+      currentState = titlePage.handlePageInput(currentState);
+
+    } else if (currentState == DIFFICULTY) {
+      titlePage.drawDifficultyScreen();
+      currentState = titlePage.handleDifficultyInput(currentState);
+      currentState = titlePage.handlePageInput(currentState);
+
+    } else if (currentState == PLAY) {
+      float baseSpeed = titlePage.getDifficultySpeed();
+
+      // Adjust game speed based on slow effect
+      // Slowed: 0.3s between updates, Normal: 0.1s
+      if (game.getSnake().getIsSlowed()) {
+        updateInterval = baseSpeed * 2.0f;
+      } else {
+        updateInterval = baseSpeed;
+      }
+
+      // Update game logic
+      double currentTime = GetTime();
+      if (currentTime - lastUpdateTime >= updateInterval) {
+        game.Update();  // Move snake, check collisions, update apples
+        lastUpdateTime = currentTime;
+      }
+
+      // Check if Game over
+      if (!game.getisRunning()) {
+        finalScore = game.getScore();
+        isHighScore = titlePage.getScoreboard().isHighScore(finalScore);
+        currentState = GAME_OVER;
+      }
+
+      // Handle player input
+      Vector2 tempDirection = game.getSnake().getDirection();
+      game.HandleInput(tempDirection);
+
+      // Drawing
+      ClearBackground(green);
+
+      // Draw UI elements
+      DrawText("SNAKE GAME", 20, 40, 20, darkGreen);
+      DrawText(TextFormat("Score: %i", game.getScore()), 600, 40, 30,
+               darkGreen);
+
+      // Show slow effect indicator
+      if (game.getSnake().getIsSlowed()) {
+        DrawText("SLOWED!", 20, 60, 25, BLUE);
+      }
+
+      // Draw game objects (snake and apples and bananas)
+      game.draw(game.getCellSize());
+
+      // T pauses/returns to menu
+      if (IsKeyPressed(KEY_T)) {
+        currentState = TITLE;
+      }
+    } else if (currentState == GAME_OVER) {
+      titlePage.drawGameOverScreen(finalScore, isHighScore);
+
+      // If high score, go to name entry
+      if (IsKeyPressed(KEY_ENTER)) {
+        if (isHighScore) {
+          currentState = ENTER_NAME;
+        } else {
+          game = GameController();  // Reset game
+          lastUpdateTime = GetTime();
+          currentState = PLAY;
+        }
+      }
+
+      if (IsKeyPressed(KEY_T)) {
+        currentState = TITLE;
+      }
+
+    } else if (currentState == ENTER_NAME) {
+      titlePage.drawNameEntryScreen(finalScore);
+      currentState = titlePage.handleNameEntry(currentState, finalScore);
     }
-
-    // Update game logic
-    double currentTime = GetTime();
-    if (currentTime - lastUpdateTime >= updateInterval) {
-      game.Update();  // Move snake, check collisions, update apples
-      lastUpdateTime = currentTime;
-    }
-
-    // Handle player input
-    Vector2 tempDirection = game.getSnake().getDirection();
-    game.HandleInput(tempDirection);
-
-    // Drawing
-    ClearBackground(green);
-
-    // Draw UI elements
-    DrawText("SNAKE GAME", 20, 40, 20, darkGreen);
-    DrawText(TextFormat("Score: %i", game.getScore()), 600, 40, 30, darkGreen);
-
-    // Show slow effect indicator
-    if (game.getSnake().getIsSlowed()) {
-      DrawText("SLOWED!", 20, 60, 25, BLUE);
-    }
-
-    // Draw game objects (snake and apples)
-    game.draw(game.getCellSize());
 
     EndDrawing();
   }
 
-  // Cleanup and close window
   CloseWindow();
   return 0;
 }

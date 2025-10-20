@@ -191,7 +191,6 @@ void GameController::GameOver(int cellNum) {
   }
 
   isRunning = false;
-  score = 0;
   lastSpawnTime = GetTime();  // Resets spawn timer
 }
 
