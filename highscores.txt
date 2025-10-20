@@ -1,0 +1,10 @@
+LEV TARAS,4,Hard
+BOb,2,Easy
+Player,2,Easy
+Player,2,Easy
+Player,2,Easy
+PlayerT,2,Medium
+Player,1,Medium
+Player,0,Medium
+Player,0,Medium
+Player,0,Medium
