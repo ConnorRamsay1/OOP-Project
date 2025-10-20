@@ -1,10 +1,11 @@
 // GameController Implementation File
 
+#include "GameController.h"
+
 #include <deque>
 #include <iostream>
 #include <vector>
 
-#include "GameController.h"
 #include "Snake.h"
 #include "raylib.h"
 
@@ -174,15 +175,20 @@ void GameController::Update() {
     checkCollisionWithSlowApple();
     checkCollisionWithEdges(cellNum);
     checkCollisionWithHead();
-}
+  }
 }
 
 void GameController::GameOver(int cellNum) {
   snake.Reset();
   removeApples();
-  // Spawn Apples
-  spawnLengthApple();
-  spawnSlowApple();
+
+  // Spawn Multiple Apples
+  for (int i = 0; i < maxLengthApples; i++) {
+    spawnLengthApple();
+  }
+  for (int i = 0; i < maxSlowApples; i++) {
+    spawnSlowApple();
+  }
 
   isRunning = false;
   score = 0;
@@ -207,7 +213,7 @@ void GameController::checkCollisionWithSlowApple() {
         (snake.getBody()[0].y == slowApples[i]->getPosition().y)) {
       slowApples[i]->setPosition(
           slowApples[i]->GenerateRandomPos(cellNum, snake));
-      snake.applySlowEffect(3.0f); //Changes length of effect
+      snake.applySlowEffect(3.0f);  // Changes length of effect
 
       // Delete slowApple
       delete slowApples[i];
