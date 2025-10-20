@@ -39,10 +39,12 @@ class Snake {
   Color getColor();
   const deque<Vector2>& getBody();
   bool getIsSlowed();
+  bool getPushBack();
 
   // Setters
   void setColor(Color color);
   void setAddSegment(bool addSegment);
+  void setPushBack(bool PushBack);
   void setDirection(Vector2 direction);
   void setBody(deque<Vector2> body);
   void setIsSlowed(bool isSlowed);
