@@ -43,6 +43,7 @@ class Fruit {
   virtual void draw(int cellSize) = 0;
   virtual Vector2 GenerateRandomCell(int cellNum);
   virtual Vector2 GenerateRandomPos(int cellNum, const Snake& snake) = 0;
+  virtual ~Fruit();
 };
 
 #endif

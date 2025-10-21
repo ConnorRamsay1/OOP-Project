@@ -6,11 +6,8 @@
 #include <iostream>
 #include <vector>
 
-<<<<<<< HEAD
 #include "GameController.h"
 #include "DecreaseLengthBanana.h"
-=======
->>>>>>> 64d81f2a9ee6373b8c32ae9edc506359d2a2f630
 #include "Snake.h"
 #include "raylib.h"
 
@@ -208,15 +205,6 @@ void GameController::GameOver(int cellNum) {
   lastSpawnTime = GetTime();  // Resets spawn timer
 }
 
-<<<<<<< HEAD
-//Delete snake part -------------------------------------------------------------------------------------------------------
-void GameController::DecreaseSnake(int _DecreaseAmount){
-  
-}
-
-
-=======
->>>>>>> 64d81f2a9ee6373b8c32ae9edc506359d2a2f630
 // Managing Collisions
 void GameController::checkCollisionWithLengthApple() {
   for (int i = 0; i < lengthApples.size(); i++) {
