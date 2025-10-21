@@ -1,5 +1,7 @@
 #include "DecreaseLengthBanana.h"
 #include "Fruit.h"
+#include "GameController.h"
+#include "Snake.h"
 #include <iostream>
 #include <deque>
 #include <cmath>
@@ -27,12 +29,16 @@ int DecreaseLengthBanana::getDecreaseAmount(int _DecreaseAmount) { return _Decre
 
 // Draw
 void DecreaseLengthBanana::draw(int cellSize) {
+     //DrawRectangle(screenPos.x - cellSize/2, screenPos.y - cellSize/2, cellSize, cellSize, YELLOW);
+     setInsideColour({255, 235, 59, 255});
+     setOutsideColour({218, 165, 32, 255});
    Vector2 screenPos = { position.x * cellSize, position.y * cellSize };
+   //std::cout << "Drawing banana at pixel: " << screenPos.x << ", " << screenPos.y << std::endl;
     BananaDraw(cellSize, cellSize / 2, getInsideColour(), getOutsideColour(), screenPos);
 }
 
 // Random position avoiding snake
-Vector2 DecreaseLengthBanana::GenerateRandomPos(int cellNum, Snake snake) {
+Vector2 DecreaseLengthBanana::GenerateRandomPos(int cellNum, const Snake& snake) {
     Vector2 newPos = Fruit::GenerateRandomCell(cellNum);
     std::deque<Vector2> emptyDeque;
     while (Fruit::elementInDeque(newPos, snake.getBody(), emptyDeque)) {
@@ -42,6 +48,6 @@ Vector2 DecreaseLengthBanana::GenerateRandomPos(int cellNum, Snake snake) {
 }
 
 // Behavior when eaten
-void DecreaseLengthBanana::DecreaseLength(int _DecreaseAmount) {
-    GameController::DecreaseSnake(_DecreaseAmount);
+void DecreaseLengthBanana::DecreaseLength(int _DecreaseAmount, GameController& controller) {
+    controller.DecreaseSnake(_DecreaseAmount);
 }

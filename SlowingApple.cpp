@@ -41,7 +41,7 @@ void SlowingApple::draw(int cellSize) {
              position.y * cellSize + cellSize / 2, cellSize / 4, WHITE);
 }
 
-Vector2 SlowingApple::GenerateRandomPos(int cellNum, Snake snake) {
+Vector2 SlowingApple::GenerateRandomPos(int cellNum, const Snake& snake) {
   Vector2 position = GenerateRandomCell(cellNum);
   deque<Vector2> emptyDeque;
   while (elementInDeque(position, snake.getBody(), emptyDeque)) {

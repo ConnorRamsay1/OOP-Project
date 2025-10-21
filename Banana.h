@@ -2,10 +2,11 @@
 #define BANANA_H
 
 #include "Fruit.h"
-#include "GameController.h"
 
-class Banana : public virtual Fruit, public GameController{
-private:
+class GameController;
+
+class Banana : public virtual Fruit{
+protected:
 Color _bananaYellow; 
 Color _bananaOutline; 
 

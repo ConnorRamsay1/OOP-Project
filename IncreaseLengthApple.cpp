@@ -50,7 +50,7 @@ void IncreaseLengthApple::draw(int cellSize) {
                 cellSize, getColor());
 }
 
-Vector2 IncreaseLengthApple::GenerateRandomPos(int cellNum, Snake snake) {
+Vector2 IncreaseLengthApple::GenerateRandomPos(int cellNum, const Snake& snake) {
   Vector2 position = GenerateRandomCell(cellNum);
   deque<Vector2> emptyDeque;
   while(elementInDeque(position, snake.getBody(), emptyDeque)){

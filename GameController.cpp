@@ -5,6 +5,7 @@
 #include <vector>
 
 #include "GameController.h"
+#include "DecreaseLengthBanana.h"
 #include "Snake.h"
 #include "raylib.h"
 
@@ -15,6 +16,7 @@ GameController::GameController() {
   Snake snake;
   IncreaseLengthApple lengthApple;
   SlowingApple slowApple;
+  DecreaseLengthBanana DecreaseBananas;
   lastInputTime = 0;
   inputCooldown = 0.1f;
   cellNum = 25;
@@ -26,6 +28,7 @@ GameController::GameController() {
   // Max no. of Apples
   maxLengthApples = 3;
   maxSlowApples = 2;
+  maxDecreaseBanana = 2;
   lastSpawnTime = 0;
   spawnRate = 3.0f;
 
@@ -35,6 +38,9 @@ GameController::GameController() {
   }
   for (int i = 0; i < maxSlowApples; i++) {
     spawnSlowApple();
+  }
+  for (int i = 0; i < maxDecreaseBanana; i++){
+    spawnDecreaseBanana();
   }
 }
 
@@ -198,7 +204,7 @@ void GameController::GameOver(int cellNum) {
   lastSpawnTime = GetTime();  // Resets spawn timer
 }
 
-//Delete snake part
+//Delete snake part -------------------------------------------------------------------------------------------------------
 void GameController::DecreaseSnake(int _DecreaseAmount){
   
 }
@@ -409,7 +415,10 @@ void GameController::spawnDecreaseBanana() {
     }
     newBanana->setPosition(newBananaPosition);
     DecreaseBananas.push_back(newBanana);  // Adds new apple to lengthApples vector
+    std::cout << "Spawned banana at: " 
+          << newBananaPosition.x << ", " << newBananaPosition.y << std::endl;
   }
+  
   return;
 }
 
@@ -429,7 +438,7 @@ void GameController::removeApples() {
 void GameController::removeBanana(){
   // Delete LengthBanana
   for (int i = 0; i < DecreaseBananas.size(); i++) {
-    delete lengthApples[i];
+    delete DecreaseBananas[i];
 
     DecreaseBananas.clear();  // clears vector/ empties container
   }

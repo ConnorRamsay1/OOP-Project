@@ -35,8 +35,8 @@ public:
 
   // Drawing Object & Generating Object Position
   void draw(int cellSize) override;
-  Vector2 GenerateRandomPos(int cellNum, Snake snake) override;
-  void DecreaseLength(int _DecreaseAmount);
+  Vector2 GenerateRandomPos(int cellNum, const Snake& snake) override;
+  void DecreaseLength(int _DecreaseAmount, GameController& controller);
 };
 
 #endif

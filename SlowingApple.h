@@ -33,7 +33,7 @@ class SlowingApple : public Fruit {
 
   // Drawing Object & Setting Object Position
   void draw(int cellSize) override;
-  Vector2 GenerateRandomPos(int cellNum, Snake snake) override;
+  Vector2 GenerateRandomPos(int cellNum, const Snake& snake) override;
 };
 
 #endif

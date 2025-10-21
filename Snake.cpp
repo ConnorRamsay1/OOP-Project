@@ -36,7 +36,7 @@ Snake::Snake() {
 Color Snake::getColor() { return color; }
 bool Snake::getAddSegment() { return addSegment; }
 Vector2 Snake::getDirection() { return direction; }
-const deque<Vector2>& Snake::getBody() { return body; }
+const deque<Vector2>& Snake::getBody() const { return body; }
 bool Snake::getIsSlowed() { return isSlowed; }
 bool Snake::getPushBack() { return PushBack; }
 

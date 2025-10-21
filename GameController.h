@@ -9,11 +9,12 @@
 
 #include "Fruit.h"
 #include "IncreaseLengthApple.h"
-#include "DecreaseLengthBanana.h"
 #include "SlowingApple.h"
 #include "Snake.h"
 #include "raylib.h"
 
+
+class DecreaseLengthBanana;
 using namespace std;
 
 class GameController {

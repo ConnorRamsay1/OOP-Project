@@ -42,7 +42,7 @@ class Fruit {
                               deque<Vector2> deque2);
   virtual void draw(int cellSize) = 0;
   virtual Vector2 GenerateRandomCell(int cellNum);
-  virtual Vector2 GenerateRandomPos(int cellNum, Snake snake) = 0;
+  virtual Vector2 GenerateRandomPos(int cellNum, const Snake& snake) = 0;
 };
 
 #endif

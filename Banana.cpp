@@ -3,22 +3,28 @@
 
 
 //Setters 
-void Banana::setOutsideColour(Color _bananaOutline){this->_bananaOutline = {255, 235, 59, 255};}
-void Banana::setInsideColour(Color _bananaYellow){this->_bananaYellow = {218, 165, 32, 255};}
+void Banana::setOutsideColour(Color Outline){this->_bananaOutline = Outline;}
+void Banana::setInsideColour(Color Inside){this->_bananaYellow = Inside;}
 //getters
 Color Banana::getOutsideColour(){return _bananaOutline;}
 Color Banana::getInsideColour(){return _bananaYellow;}
 //drawing Banana
-void Banana::BananaDraw(int cellsize, int cellnum, Color _bananaYellow, Color _bananaOutline, Vector2 position){
-     // Curved body
-    for (int i = 0; i < 10; i++) {
-        float offset = sinf((float)i / 10 * PI) * 4 * cellsize;
-        DrawEllipse(position.x + i * 2 * cellsize, position.y - offset, cellnum, cellnum, _bananaYellow);
-    }
+void Banana::BananaDraw(int cellSize, int cellNum, Color _bananaYellow, Color _bananaOutline, Vector2 position) {
+    int segments = 6;
+    float maxWidth = cellSize;     // max horizontal space
+    float maxHeight = cellSize;    // max vertical space
+    float width = maxWidth / segments;   // width per segment
+    float height = maxHeight * 0.6f;    // slightly smaller than full height
+    float spacing = width * 0.9f;       // space between segments
+    float amplitude = height * 0.5f;    // vertical curve
 
-    // Outline (a bit darker curve)
-    for (int i = 0; i < 10; i++) {
-        float offset = sinf((float)i / 10 * PI) * 4 * cellsize;
-        DrawEllipseLines(position.x + i * 2 * cellsize, position.y - offset, cellnum, cellnum, _bananaOutline);
+    float startX = position.x + cellSize / 2.0f - (segments - 1) * spacing / 2.0f;
+    float centerY = position.y + cellSize / 2.0f;  // center in grid cell
+
+    for (int i = 0; i < segments; i++) {
+        float offsetY = sinf((float)i / (segments - 1) * PI) * amplitude;
+        DrawEllipse(startX + i * spacing, centerY - offsetY, width, height, _bananaYellow);
+        DrawEllipseLines(startX + i * spacing, centerY - offsetY, width, height, _bananaOutline);
     }
 }
+

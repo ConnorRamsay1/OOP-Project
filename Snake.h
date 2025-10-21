@@ -37,7 +37,7 @@ class Snake {
   Vector2 getDirection();
   bool getAddSegment();
   Color getColor();
-  const deque<Vector2>& getBody();
+  const deque<Vector2>& getBody() const;
   bool getIsSlowed();
   bool getPushBack();
 
