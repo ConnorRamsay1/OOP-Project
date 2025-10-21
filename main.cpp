@@ -1,5 +1,8 @@
 // Main Game Loop
 
+//Compile Command:
+// g++ main.cpp GameController.cpp Snake.cpp IncreaseLengthApple.cpp Fruit.cpp SlowingApple.cpp TitlePage.cpp Scoreboard.cpp DecreaseLengthBanana.cpp Banana.cpp  -o raylibTest -lraylib -lGL -lm -lpthread -ldl -lrt 
+
 #include <deque>
 #include <iostream>
 

@@ -53,11 +53,11 @@ string TitlePage::getDifficultyString() const {
 
 float TitlePage::getDifficultySpeed() const {
   if (currentDifficulty == EASY) {
-    return 0.15f;
-  } else if (currentDifficulty == MEDIUM) {
     return 0.1f;
+  } else if (currentDifficulty == MEDIUM) {
+    return 0.08f;
   } else {
-    return 0.06f;
+    return 0.05f;
   }
 }
 
@@ -119,6 +119,9 @@ void TitlePage::drawTitleScreen() {
            difficultyButton.x +
                (difficultyButton.width - MeasureText("Difficulty", 30)) / 2,
            difficultyButton.y + 10, 30, BLACK);
+
+  DrawText("USE MOUSE TO NAVIGATE PAGES", screenWidth / 2 - 175,
+           screenHeight - 30, 20, RED);
 }
 
 // Rules Page
@@ -305,7 +308,6 @@ void TitlePage::drawNameEntryScreen(int finalScore) {
   }
 
   DrawText("Press ENTER to save", screenWidth / 2 - 100, 400, 23, DARKGRAY);
-  DrawText("Press T to skip", screenWidth / 2 - 90, 435, 20, GRAY);
 }
 
 // Handle Mouse Inputs & Navigating through game
