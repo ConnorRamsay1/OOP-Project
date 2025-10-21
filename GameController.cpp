@@ -448,10 +448,6 @@ void GameController::spawnDecreaseBanana(){
 
   newBanana->setPosition(newBananaPosition);
   DecreaseBananas.push_back(newBanana);
-  
-  std::cout << "Spawned banana at: " 
-            << newBananaPosition.x << ", " 
-            << newBananaPosition.y << std::endl;
 }
 
 void GameController::removeApples() {

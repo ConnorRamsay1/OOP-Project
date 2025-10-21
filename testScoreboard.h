@@ -3,7 +3,6 @@
 #define TESTSCOREBOARD_H
 
 #include <iostream>
-
 #include "Scoreboard.h"
 using namespace std;
 
