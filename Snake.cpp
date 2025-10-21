@@ -95,13 +95,16 @@ void Snake::Update() {
   if (addSegment == true) {
     body.push_front(newHead);
     addSegment = false;
+  } else if (subtractSegment == true) {
+    body.push_front(newHead);
+    if (body.size() > 3) {  
+      body.pop_back(); 
+      body.pop_back();  
+    }
+    subtractSegment = false;
   } else {
     body.pop_back();
     body.push_front(newHead);
-  }
-  if(subtractSegment == true){
-    body.pop_back();
-    PushBack = false;
   }
 
 

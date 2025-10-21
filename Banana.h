@@ -25,5 +25,7 @@ Color _bananaOutline;
                   Color _bananaOutline, Vector2 position);
 
 };
+//Desctructor------------------------------------------------------------------------
+
 
 #endif

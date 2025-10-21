@@ -18,7 +18,7 @@ private:
 int _DecreaseAmount;
 
 public:
- // Constructors--------------------------------------------------------------------------------------------------
+ // Constructors-------------c-------------------------------------------------------------------------------------
   DecreaseLengthBanana();
   DecreaseLengthBanana(Color color1,Color color2, Vector2 position, int _DecreaseAmount);
 
@@ -34,7 +34,6 @@ public:
   // Drawing Object & Generating Object Position
   void draw(int cellSize) override;
   Vector2 GenerateRandomPos(int cellNum, const Snake& snake) override;
-  void DecreaseLength(int _DecreaseAmount, GameController& controller);
 };
 
 #endif

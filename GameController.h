@@ -63,7 +63,7 @@ class GameController {
   int getScore();
   bool getisRunning();
 
-  Snake getSnake();
+  Snake& getSnake();
   vector<IncreaseLengthApple*> getLengthApples();
   vector<SlowingApple*> getSlowApples();
   vector<DecreaseLengthBanana*> getDecreaseBananas();

@@ -6,8 +6,8 @@
 #include <iostream>
 #include <vector>
 
-#include "GameController.h"
 #include "DecreaseLengthBanana.h"
+#include "GameController.h"
 #include "Snake.h"
 #include "raylib.h"
 
@@ -16,9 +16,6 @@ using namespace std;
 // Contructors----------------------------------------------------------------------------------------------
 GameController::GameController() {
   Snake snake;
-  IncreaseLengthApple lengthApple;
-  SlowingApple slowApple;
-  DecreaseLengthBanana DecreaseBananas;
   lastInputTime = 0;
   inputCooldown = 0.1f;
   cellNum = 25;
@@ -41,7 +38,7 @@ GameController::GameController() {
   for (int i = 0; i < maxSlowApples; i++) {
     spawnSlowApple();
   }
-  for (int i = 0; i < maxDecreaseBanana; i++){
+  for (int i = 0; i < maxDecreaseBanana; i++) {
     spawnDecreaseBanana();
   }
 }
@@ -67,7 +64,7 @@ int GameController::getScore() { return score; }
 float GameController::getInputCooldown() { return inputCooldown; }
 double GameController::getLastInputTime() { return lastInputTime; }
 bool GameController::getisRunning() { return isRunning; }
-Snake GameController::getSnake() { return snake; }
+Snake& GameController::getSnake() { return snake; }
 
 // Getters for SpawnRate
 int GameController::getMaxLengthApples() { return maxLengthApples; }
@@ -76,8 +73,12 @@ int GameController::getMaxDecreaseBanana() { return maxDecreaseBanana; }
 double GameController::getLastSpawnTime() { return lastSpawnTime; }
 float GameController::getSpawnRate() { return spawnRate; }
 vector<SlowingApple*> GameController::getSlowApples() { return slowApples; }
-vector<IncreaseLengthApple*> GameController::getLengthApples() { return lengthApples; }
-vector<DecreaseLengthBanana*> GameController::getDecreaseBananas() { return DecreaseBananas; }
+vector<IncreaseLengthApple*> GameController::getLengthApples() {
+  return lengthApples;
+}
+vector<DecreaseLengthBanana*> GameController::getDecreaseBananas() {
+  return DecreaseBananas;
+}
 
 // Setters
 void GameController::setScore(int score) {
@@ -118,9 +119,10 @@ void GameController::setSlowApples(vector<SlowingApple*> SlowApples) {
   this->slowApples = slowApples;
   return;
 }
- void GameController::setDecreaseBananas(vector<DecreaseLengthBanana*> DecreaseBananas){
+void GameController::setDecreaseBananas(
+    vector<DecreaseLengthBanana*> DecreaseBananas) {
   this->DecreaseBananas = DecreaseBananas;
- }
+}
 
 void GameController::setLastSpawnTime(double lastSpawnTime) {
   this->lastSpawnTime = lastSpawnTime;
@@ -176,7 +178,7 @@ void GameController::draw(int cellSize) {
   for (int i = 0; i < slowApples.size(); i++) {
     slowApples[i]->draw(cellSize);
   }
-  for(int i=0; i < DecreaseBananas.size(); i++){
+  for (int i = 0; i < DecreaseBananas.size(); i++) {
     DecreaseBananas[i]->draw(cellSize);
   }
 }
@@ -236,15 +238,12 @@ void GameController::checkCollisionWithSlowApple() {
     }
   }
 }
-  void GameController::checkCollisionWithDecreaseBanana() {
-     for (int i = 0; i < DecreaseBananas.size(); i++) {
+void GameController::checkCollisionWithDecreaseBanana() {
+  for (int i = 0; i < DecreaseBananas.size(); i++) {
     if ((snake.getBody()[0].x == DecreaseBananas[i]->getPosition().x) &&
         (snake.getBody()[0].y == DecreaseBananas[i]->getPosition().y)) {
-      DecreaseBananas[i]->setPosition(
-          DecreaseBananas[i]->GenerateRandomPos(cellNum, snake));
-        snake.setSubtractSegment(true);
-        score = score - 1;
-      
+      snake.setSubtractSegment(true);
+      score = score + 1;
 
       // Delete DecreaseBananas
       delete DecreaseBananas[i];
@@ -279,165 +278,202 @@ void GameController::checkCollisionWithEdges(int cellNum) {
 // Spawning & Removing  Apples
 void GameController::spawnLengthApple() {
   if (lengthApples.size() >= maxLengthApples) {
-    return;  // Already at max amount
-  } else {
-    IncreaseLengthApple* newApple =
-        new IncreaseLengthApple();  // Dynamically allocates
-    Vector2 newApplePosition = newApple->GenerateRandomPos(cellNum, snake);
-    bool validPosition = false;
-    while (!validPosition) {
-      validPosition = true;
-      for (int i = 0; i < lengthApples.size(); i++) { 
-         // Check valid spawn position against other length apples
-        if ((newApplePosition.x == lengthApples[i]->getPosition().x) &&
-            (newApplePosition.y == lengthApples[i]->getPosition().y)) {
-          validPosition = false;
-          newApplePosition = newApple->GenerateRandomPos(cellNum, snake);
-          break;
-        }
-      }
-      for (int i = 0; i < slowApples.size();
-           i++) {  // Check valid spawn position against other slow apples
-        if ((newApplePosition.x == slowApples[i]->getPosition().x) &&
-            (newApplePosition.y == slowApples[i]->getPosition().y)) {
-          validPosition = false;
-          newApplePosition = newApple->GenerateRandomPos(cellNum, snake);
-          break;
-        }
-      }
-       //check spawn aganist other Bananas
-      for(int i = 0; i < DecreaseBananas.size(); i++){
-        if((newApplePosition.x == DecreaseBananas[i]->getPosition().x) &&
-          (newApplePosition.y == DecreaseBananas[i]->getPosition().y)){
-            validPosition = false;
-          newApplePosition = newApple->GenerateRandomPos(cellNum, snake);
-          break;
-          }
+    return;
+  }
+
+  IncreaseLengthApple* newApple = new IncreaseLengthApple();
+  Vector2 newApplePosition = newApple->GenerateRandomPos(cellNum, snake);
+  bool validPosition = false;
+  int attempts = 0;
+
+  while (!validPosition && attempts < 100) {
+    validPosition = true;
+
+    // Check against other length apples
+    for (size_t i = 0; i < lengthApples.size(); i++) {
+      if (lengthApples[i] != nullptr &&
+          newApplePosition.x == lengthApples[i]->getPosition().x &&
+          newApplePosition.y == lengthApples[i]->getPosition().y) {
+        validPosition = false;
+        newApplePosition = newApple->GenerateRandomPos(cellNum, snake);
+        break;
       }
     }
-    newApple->setPosition(newApplePosition);
-    lengthApples.push_back(newApple);  // Adds new apple to lengthApples vector
+
+    // Check against slow apples
+    if (validPosition) {
+      for (size_t i = 0; i < slowApples.size(); i++) {
+        if (slowApples[i] != nullptr &&
+            newApplePosition.x == slowApples[i]->getPosition().x &&
+            newApplePosition.y == slowApples[i]->getPosition().y) {
+          validPosition = false;
+          newApplePosition = newApple->GenerateRandomPos(cellNum, snake);
+          break;
+        }
+      }
+    }
+
+    // Check against bananas
+    if (validPosition) {
+      for (size_t i = 0; i < DecreaseBananas.size(); i++) {
+        if (DecreaseBananas[i] != nullptr &&
+            newApplePosition.x == DecreaseBananas[i]->getPosition().x &&
+            newApplePosition.y == DecreaseBananas[i]->getPosition().y) {
+          validPosition = false;
+          newApplePosition = newApple->GenerateRandomPos(cellNum, snake);
+          break;
+        }
+      }
+    }
+
+    attempts++;
   }
-  return;
+
+  newApple->setPosition(newApplePosition);
+  lengthApples.push_back(newApple);
 }
+
 void GameController::spawnSlowApple() {
   if (slowApples.size() >= maxSlowApples) {
-    return;  // Already at max amount
-  } else {
-    SlowingApple* newApple = new SlowingApple();
-    Vector2 newApplePosition = newApple->GenerateRandomPos(cellNum, snake);
-    bool validPosition = false;
-    int index = 0;  // Prevents infinite loop
-
-    while (!validPosition && index < 100) {
-      validPosition = true;
-
-      // Check valid spawn position against other length apples
-      for (int i = 0; i < lengthApples.size(); i++) {
-        if ((newApplePosition.x == lengthApples[i]->getPosition().x) &&
-            (newApplePosition.y == lengthApples[i]->getPosition().y)) {
-          validPosition = false;
-          newApplePosition = newApple->GenerateRandomPos(cellNum, snake);
-          break;
-        }
-      }
-      // Check valid spawn position against other slow apples
-      for (int i = 0; i < slowApples.size(); i++) {
-        if ((newApplePosition.x == slowApples[i]->getPosition().x) &&
-            (newApplePosition.y == slowApples[i]->getPosition().y)) {
-          validPosition = false;
-          newApplePosition = newApple->GenerateRandomPos(cellNum, snake);
-          break;
-        }
-      }
-      //check spawn aganist other Bananas
-      for(int i = 0; i < DecreaseBananas.size(); i++){
-        if((newApplePosition.x == DecreaseBananas[i]->getPosition().x) &&
-          (newApplePosition.y == DecreaseBananas[i]->getPosition().y)){
-            validPosition = false;
-          newApplePosition = newApple->GenerateRandomPos(cellNum, snake);
-          break;
-          }
-      }
-      index = index + 1;
-    }
-    newApple->setPosition(newApplePosition);
-    slowApples.push_back(newApple);  // Adds new apple to lengthApples vector
+    return;
   }
-  return;
+
+  SlowingApple* newApple = new SlowingApple();
+  Vector2 newApplePosition = newApple->GenerateRandomPos(cellNum, snake);
+  bool validPosition = false;
+  int attempts = 0;
+
+  while (!validPosition && attempts < 100) {
+    validPosition = true;
+
+    // Check against length apples
+    for (size_t i = 0; i < lengthApples.size(); i++) {
+      if (lengthApples[i] != nullptr &&
+          newApplePosition.x == lengthApples[i]->getPosition().x &&
+          newApplePosition.y == lengthApples[i]->getPosition().y) {
+        validPosition = false;
+        newApplePosition = newApple->GenerateRandomPos(cellNum, snake);
+        break;
+      }
+    }
+
+    // Check against other slow apples
+    if (validPosition) {
+      for (size_t i = 0; i < slowApples.size(); i++) {
+        if (slowApples[i] != nullptr &&
+            newApplePosition.x == slowApples[i]->getPosition().x &&
+            newApplePosition.y == slowApples[i]->getPosition().y) {
+          validPosition = false;
+          newApplePosition = newApple->GenerateRandomPos(cellNum, snake);
+          break;
+        }
+      }
+    }
+
+    // Check against bananas
+    if (validPosition) {
+      for (size_t i = 0; i < DecreaseBananas.size(); i++) {
+        if (DecreaseBananas[i] != nullptr &&
+            newApplePosition.x == DecreaseBananas[i]->getPosition().x &&
+            newApplePosition.y == DecreaseBananas[i]->getPosition().y) {
+          validPosition = false;
+          newApplePosition = newApple->GenerateRandomPos(cellNum, snake);
+          break;
+        }
+      }
+    }
+
+    attempts++;
+  }
+
+  newApple->setPosition(newApplePosition);
+  slowApples.push_back(newApple);
 }
 
-void GameController::spawnDecreaseBanana() {
+void GameController::spawnDecreaseBanana(){
   if (DecreaseBananas.size() >= maxDecreaseBanana) {
-    return;  // Already at max amount
-  } else {
-    DecreaseLengthBanana* newBanana = new DecreaseLengthBanana();
-    Vector2 newBananaPosition = newBanana->GenerateRandomPos(cellNum, snake);
-    bool validPosition = false;
-    int index = 0;  // Prevents infinite loop
-
-    while (!validPosition && index < 100) {
-      validPosition = true;
-
-      // Check valid spawn position against other length apples
-      for (int i = 0; i < lengthApples.size(); i++) { // loop only checks through once no?
-        if ((newBananaPosition.x == lengthApples[i]->getPosition().x) &&
-            (newBananaPosition.y == lengthApples[i]->getPosition().y)) {
-          validPosition = false;
-          newBananaPosition = newBanana->GenerateRandomPos(cellNum, snake);
-          break;
-        }
-      }
-      // Check valid spawn position against other slow apples
-      for (int i = 0; i < slowApples.size(); i++) { 
-        if ((newBananaPosition.x == slowApples[i]->getPosition().x) &&
-            (newBananaPosition.y == slowApples[i]->getPosition().y)) {
-          validPosition = false;
-          newBananaPosition = newBanana->GenerateRandomPos(cellNum, snake);
-          break;
-        }
-      }
-       //check spawn aganist other Bananas
-      for(int i = 0; i < DecreaseBananas.size(); i++){
-        if((newBananaPosition.x == DecreaseBananas[i]->getPosition().x) &&
-          (newBananaPosition.y == DecreaseBananas[i]->getPosition().y)){
-            validPosition = false;
-          newBananaPosition = newBanana->GenerateRandomPos(cellNum, snake);
-          break;
-          }
-      }
-      index = index + 1;
-    }
-    newBanana->setPosition(newBananaPosition);
-    DecreaseBananas.push_back(newBanana);  // Adds new apple to lengthApples vector
-    std::cout << "Spawned banana at: " 
-          << newBananaPosition.x << ", " << newBananaPosition.y << std::endl;
+    return;
   }
+
+  DecreaseLengthBanana* newBanana = new DecreaseLengthBanana();
+  Vector2 newBananaPosition = newBanana->GenerateRandomPos(cellNum, snake);
+  bool validPosition = false;
+  int attempts = 0;
+
+  while (!validPosition && attempts < 100) {
+    validPosition = true;
+
+    // Check against length apples
+    for (size_t i = 0; i < lengthApples.size(); i++) {
+      if (lengthApples[i] != nullptr &&
+          newBananaPosition.x == lengthApples[i]->getPosition().x &&
+          newBananaPosition.y == lengthApples[i]->getPosition().y) {
+        validPosition = false;
+        newBananaPosition = newBanana->GenerateRandomPos(cellNum, snake);
+        break;
+      }
+    }
+
+    // Check against slow apples
+    if (validPosition) {
+      for (size_t i = 0; i < slowApples.size(); i++) {
+        if (slowApples[i] != nullptr &&
+            newBananaPosition.x == slowApples[i]->getPosition().x &&
+            newBananaPosition.y == slowApples[i]->getPosition().y) {
+          validPosition = false;
+          newBananaPosition = newBanana->GenerateRandomPos(cellNum, snake);
+          break;
+        }
+      }
+    }
+
+    // Check against other bananas
+    if (validPosition) {
+      for (size_t i = 0; i < DecreaseBananas.size(); i++) {
+        if (DecreaseBananas[i] != nullptr &&
+            newBananaPosition.x == DecreaseBananas[i]->getPosition().x &&
+            newBananaPosition.y == DecreaseBananas[i]->getPosition().y) {
+          validPosition = false;
+          newBananaPosition = newBanana->GenerateRandomPos(cellNum, snake);
+          break;
+        }
+      }
+    }
+
+    attempts++;
+  }
+
+  newBanana->setPosition(newBananaPosition);
+  DecreaseBananas.push_back(newBanana);
   
-  return;
+  std::cout << "Spawned banana at: " 
+            << newBananaPosition.x << ", " 
+            << newBananaPosition.y << std::endl;
 }
 
 void GameController::removeApples() {
   // Delete LengthApples
   for (int i = 0; i < lengthApples.size(); i++) {
     delete lengthApples[i];
-
-    lengthApples.clear();  // clears vector/ empties container
   }
+  lengthApples.clear();
   // Delete SlowingApples
   for (int i = 0; i < slowApples.size(); i++) {
     delete slowApples[i];
-    slowApples.clear();
   }
+  slowApples.clear();
 }
-void GameController::removeBanana(){
+void GameController::removeBanana() {
   // Delete LengthBanana
   for (int i = 0; i < DecreaseBananas.size(); i++) {
     delete DecreaseBananas[i];
-
-    DecreaseBananas.clear();  // clears vector/ empties container
   }
+
+  DecreaseBananas.clear();
 }
 
 // Destructor--------------------------------------------------------------------------------------------------------
-GameController::~GameController() { removeApples(); removeBanana();} 
+GameController::~GameController() {
+  removeApples();
+  removeBanana();
+}

@@ -35,4 +35,3 @@ void Banana::BananaDraw(int cellSize, int cellNum, Color _bananaYellow, Color _b
         DrawEllipseLines(startX + i * spacing, centerY - offsetY, width, height, _bananaOutline);
     }
 }
-

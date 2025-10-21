@@ -1,4 +1,4 @@
-Give,4,Hard
+Give,2300,Hard
 Us,2,Easy
 A,2,Easy
 HD,2,Easy

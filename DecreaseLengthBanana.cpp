@@ -33,11 +33,10 @@ void DecreaseLengthBanana::setPosition(Vector2 position) {this->position = posit
 
 // Draw
 void DecreaseLengthBanana::draw(int cellSize) {
-     //DrawRectangle(screenPos.x - cellSize/2, screenPos.y - cellSize/2, cellSize, cellSize, YELLOW);
      setInsideColour({255, 235, 59, 255});
      setOutsideColour({218, 165, 32, 255});
    Vector2 screenPos = { position.x * cellSize, position.y * cellSize };
-   //std::cout << "Drawing banana at pixel: " << screenPos.x << ", " << screenPos.y << std::endl;
+
     BananaDraw(cellSize, cellSize / 2, getInsideColour(), getOutsideColour(), screenPos);
 }
 
@@ -51,7 +50,3 @@ Vector2 DecreaseLengthBanana::GenerateRandomPos(int cellNum, const Snake& snake)
     return newPos;
 }
 
-// Behavior when eaten
-void DecreaseLengthBanana::DecreaseLength(int _DecreaseAmount, GameController& controller) {
-    controller.DecreaseSnake(_DecreaseAmount);
-}

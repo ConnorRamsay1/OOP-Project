@@ -48,13 +48,13 @@ int main(void) {
     BeginDrawing();
 
     // Wiping Background
-      ClearBackground(green);
-    
+    ClearBackground(green);
+
     if (currentState == TITLE) {
       titlePage.drawTitleScreen();
       currentState = titlePage.handleTitleInput(currentState);
-      if(currentState == PLAY){
-        game = GameController(); // Resets Game
+      if (currentState == PLAY) {
+        game = GameController();  // Resets Game
         lastUpdateTime = GetTime();
       }
 
@@ -89,7 +89,7 @@ int main(void) {
         lastUpdateTime = currentTime;
       }
       // checking if length of snake is zero
-      if(game.getSnake().getBody().size() == 0){
+      if (game.getSnake().getBody().size() == 0) {
         game.setisRunning(false);
       }
 
@@ -103,8 +103,6 @@ int main(void) {
       // Handle player input
       Vector2 tempDirection = game.getSnake().getDirection();
       game.HandleInput(tempDirection);
-
-
 
       // Draw UI elements
       DrawText("SNAKE GAME", 20, 40, 20, darkGreen);
