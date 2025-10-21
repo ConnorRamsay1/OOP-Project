@@ -25,9 +25,9 @@ GameController::GameController(){
 
   // Apple Spawning
   // Max no. of Apples
-  maxLengthApples = 3;
-  maxSlowApples = 2;
-  maxDecreaseBanana = 2;
+  maxLengthApples = 7;
+  maxSlowApples = 4;
+  maxDecreaseBanana = 4;
   lastSpawnTime = 0;
   spawnRate = 3.0f;
 
