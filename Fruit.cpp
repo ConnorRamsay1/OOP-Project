@@ -6,6 +6,12 @@
 #include "Fruit.h"
 #include "raylib.h"
 
+//Constructors
+  Fruit::Fruit() {};
+  Fruit::Fruit(Color color, Vector2 position){
+    this->color = color;
+    this->position = position;
+  }
 
 //Getters---------------------------------------------------------------
 Color Fruit::getColor() { return color; }
@@ -39,3 +45,6 @@ Vector2 Fruit::GenerateRandomCell(int cellNum) {
   float y = GetRandomValue(0, cellNum - 1);
   return Vector2{x, y};
 }
+
+//Virtual Desctrutor
+  Fruit::~Fruit(){}

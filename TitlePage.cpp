@@ -45,7 +45,7 @@ string TitlePage::getDifficultyString() const {
     return "Easy";
   } else if (currentDifficulty == MEDIUM) {
     return "Medium";
-  } else{
+  } else {
     return "Hard";
   }
 }
@@ -55,7 +55,7 @@ float TitlePage::getDifficultySpeed() const {
     return 0.15f;
   } else if (currentDifficulty == MEDIUM) {
     return 0.1f;
-  } else{
+  } else {
     return 0.06f;
   }
 }
@@ -135,15 +135,11 @@ void TitlePage::drawRulesScreen() {
   DrawText("- Eat RED APPLES to grow and score points", 100, positionY, 25,
            BLACK);
   positionY = positionY + spacing;
-  DrawText("- Eat GOLDEN APPLES for bonus points", 100, positionY, 25, BLACK);
-  positionY = positionY + spacing;
-  DrawText("- Avoid BLUE BANANAS (they slow you down)", 100, positionY, 25,
-           BLACK);
-  positionY = positionY + spacing;
   DrawText("- Avoid YELLOW BANANAS (they shrink you)", 100, positionY, 25,
            BLACK);
   positionY = positionY + spacing;
-  DrawText("- ORANGE BANANAS spawn multiple fruits", 100, positionY, 25, BLACK);
+  DrawText("- Avoid BLUE Apples (they slow you down)", 100, positionY, 25,
+           BLACK);
   positionY = positionY + spacing;
   DrawText("- Don't hit walls or yourself!", 100, positionY, 25, RED);
 
@@ -188,7 +184,6 @@ void TitlePage::drawScoreboardScreen() {
 }
 
 // Difficulty Screen
-
 void TitlePage::drawDifficultyScreen() {
   ClearBackground(RAYWHITE);
 
@@ -311,6 +306,7 @@ void TitlePage::drawNameEntryScreen(int finalScore) {
   DrawText("Press ENTER to save", screenWidth / 2 - 100, 400, 23, DARKGRAY);
   DrawText("Press S to skip", screenWidth / 2 - 90, 435, 20, GRAY);
 }
+
 // Handle Mouse Inputs & Navigating through game
 
 GameState TitlePage::handleDifficultyInput(GameState currentState) {

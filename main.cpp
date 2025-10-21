@@ -46,10 +46,17 @@ int main(void) {
   //===========================================================================
   while (WindowShouldClose() == false) {
     BeginDrawing();
+
+    // Wiping Background
+      ClearBackground(green);
     
     if (currentState == TITLE) {
       titlePage.drawTitleScreen();
       currentState = titlePage.handleTitleInput(currentState);
+      if(currentState == PLAY){
+        game = GameController(); // Resets Game
+        lastUpdateTime = GetTime();
+      }
 
     } else if (currentState == RULES) {
       titlePage.drawRulesScreen();
@@ -81,6 +88,10 @@ int main(void) {
         game.Update();  // Move snake, check collisions, update apples
         lastUpdateTime = currentTime;
       }
+      // checking if length of snake is zero
+      if(game.getSnake().getBody().size() == 0){
+        game.setisRunning(false);
+      }
 
       // Check if Game over
       if (!game.getisRunning()) {
@@ -93,8 +104,7 @@ int main(void) {
       Vector2 tempDirection = game.getSnake().getDirection();
       game.HandleInput(tempDirection);
 
-      // Drawing
-      ClearBackground(green);
+
 
       // Draw UI elements
       DrawText("SNAKE GAME", 20, 40, 20, darkGreen);
@@ -135,34 +145,6 @@ int main(void) {
       titlePage.drawNameEntryScreen(finalScore);
       currentState = titlePage.handleNameEntry(currentState, finalScore);
     }
-
-    // Update game logic
-    double currentTime = GetTime();
-    if (currentTime - lastUpdateTime >= updateInterval) {
-      game.Update();  // Move snake, check collisions, update apples
-      lastUpdateTime = currentTime;
-    }
-
-    // Handle player input
-    Vector2 tempDirection = game.getSnake().getDirection();
-    game.HandleInput(tempDirection);
-
-    // Drawing
-    ClearBackground(green);
-
-    // Draw UI elements
-    DrawText("SNAKE GAME", 20, 40, 20, darkGreen);
-    DrawText(TextFormat("Score: %i", game.getScore()), 600, 40, 30, darkGreen);
-
-    // Show slow effect indicator
-    if (game.getSnake().getIsSlowed()) {
-      DrawText("SLOWED!", 20, 60, 25, BLUE);
-    }
-
-    // Draw game objects (snake and apples)
-    game.draw(game.getCellSize());
-
-
     EndDrawing();
   }
 

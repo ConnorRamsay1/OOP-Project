@@ -1,6 +1,14 @@
 #include "Banana.h"
+
 #include <cmath>
 
+// Constructors---------------------------------------------------------------------
+Banana::Banana(){}
+  Banana::Banana(Vector2 position, Color _bananaYellow, Color _bananaOutline){
+    this->position = position;
+    this->_bananaYellow = _bananaYellow;
+    this->_bananaOutline = _bananaOutline;
+}
 
 //Setters 
 void Banana::setOutsideColour(Color _bananaOutline){this->_bananaOutline = {255, 235, 59, 255};}
@@ -21,4 +29,6 @@ void Banana::BananaDraw(int cellsize, int cellnum, Color _bananaYellow, Color _b
         float offset = sinf((float)i / 10 * PI) * 4 * cellsize;
         DrawEllipseLines(position.x + i * 2 * cellsize, position.y - offset, cellnum, cellnum, _bananaOutline);
     }
+
+
 }

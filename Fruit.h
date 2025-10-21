@@ -24,8 +24,8 @@ class Fruit {
   // Behaviours--------------------------------------------------------------------------------------------------
 
   // Constructors--------------------------------------------------------------------------------------------------
-  Fruit() {};
-  Fruit(Color color, Vector2 position) : color(color), position(position) {}
+  Fruit();
+  Fruit(Color color, Vector2 position);
 
   // Behaviours--------------------------------------------------------------------------------------------------
 
@@ -43,6 +43,9 @@ class Fruit {
   virtual void draw(int cellSize) = 0;
   virtual Vector2 GenerateRandomCell(int cellNum);
   virtual Vector2 GenerateRandomPos(int cellNum, Snake snake) = 0;
+
+  //Virtual Desctrutor
+  virtual ~Fruit();
 };
 
 #endif

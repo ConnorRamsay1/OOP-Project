@@ -181,8 +181,8 @@ void GameController::Update() {
     checkCollisionWithLengthApple();
     checkCollisionWithSlowApple();
     checkCollisionWithDecreaseBanana();
-    checkCollisionWithEdges(cellNum);
     checkCollisionWithHead();
+    checkCollisionWithEdges(cellNum);
   }
 }
 
@@ -197,12 +197,6 @@ void GameController::GameOver(int cellNum) {
   isRunning = false;
   lastSpawnTime = GetTime();  // Resets spawn timer
 }
-
-//Delete snake part
-void GameController::DecreaseSnake(int _DecreaseAmount){
-  
-}
-
 
 // Managing Collisions
 void GameController::checkCollisionWithLengthApple() {
@@ -241,16 +235,16 @@ void GameController::checkCollisionWithSlowApple() {
         (snake.getBody()[0].y == DecreaseBananas[i]->getPosition().y)) {
       DecreaseBananas[i]->setPosition(
           DecreaseBananas[i]->GenerateRandomPos(cellNum, snake));
-        snake.setPushBack(true);
-        score++;
+        snake.setSubtractSegment(true);
+        score = score - 1;
       
 
-      // Delete slowApple
+      // Delete DecreaseBananas
       delete DecreaseBananas[i];
       // removes pointer and shifts remaining elements to fill the gap
       DecreaseBananas.erase(DecreaseBananas.begin() + i);
 
-      // Spawn a new apple
+      // Spawn a new Banana
       spawnDecreaseBanana();
       break;
     }
@@ -436,4 +430,4 @@ void GameController::removeBanana(){
 }
 
 // Destructor--------------------------------------------------------------------------------------------------------
-GameController::~GameController() { removeApples(); } // remove banana?
+GameController::~GameController() { removeApples(); removeBanana();} 

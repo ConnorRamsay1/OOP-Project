@@ -2,22 +2,26 @@
 #define BANANA_H
 
 #include "Fruit.h"
-#include "GameController.h"
+#include "raylib.h"
 
-class Banana : public virtual Fruit, public GameController{
-private:
-Color _bananaYellow; 
-Color _bananaOutline; 
+class Banana : public virtual Fruit {
+ protected:
+  Color _bananaYellow;
+  Color _bananaOutline;
 
-public:
-//setters--------------------------
-void setOutsideColour(Color bananaOutline);
-void setInsideColour(Color bananaYellow);
-//getters---------------
-Color getOutsideColour();
-Color getInsideColour();
-//Draw Banana---------------
-void BananaDraw(int cellsize, int cellnum, Color _bananaYellow, Color _bananaOutline, Vector2 position);
+ public:
+  // Constructors-----------------------
+  Banana();
+  Banana(Vector2 position, Color _bananaYellow, Color _bananaOutline);
+  // setters--------------------------
+  void setOutsideColour(Color bananaOutline);
+  void setInsideColour(Color bananaYellow);
+  // getters---------------
+  Color getOutsideColour();
+  Color getInsideColour();
+  // Draw Banana---------------
+  void BananaDraw(int cellsize, int cellnum, Color _bananaYellow,
+                  Color _bananaOutline, Vector2 position);
 
 };
 

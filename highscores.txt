@@ -1,10 +1,10 @@
-LEV TARAS,4,Hard
-BOb,2,Easy
-Player,2,Easy
-Player,2,Easy
-Player,2,Easy
-PlayerT,2,Medium
-Player,1,Medium
-Player,0,Medium
-Player,0,Medium
-Player,0,Medium
+Give,4,Hard
+Us,2,Easy
+A,2,Easy
+HD,2,Easy
+Please,2,Easy
+and,2,Medium
+Thankyou,2,Medium
+You,1,Medium
+Absolute,0,Medium
+Legend,0,Medium
