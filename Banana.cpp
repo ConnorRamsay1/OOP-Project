@@ -1,6 +1,14 @@
 #include "Banana.h"
+
 #include <cmath>
 
+// Constructors---------------------------------------------------------------------
+Banana::Banana(){}
+  Banana::Banana(Vector2 position, Color _bananaYellow, Color _bananaOutline){
+    this->position = position;
+    this->_bananaYellow = _bananaYellow;
+    this->_bananaOutline = _bananaOutline;
+}
 
 //Setters 
 void Banana::setOutsideColour(Color Outline){this->_bananaOutline = Outline;}

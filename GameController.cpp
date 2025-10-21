@@ -1,11 +1,16 @@
 // GameController Implementation File
 
+#include "GameController.h"
+
 #include <deque>
 #include <iostream>
 #include <vector>
 
+<<<<<<< HEAD
 #include "GameController.h"
 #include "DecreaseLengthBanana.h"
+=======
+>>>>>>> 64d81f2a9ee6373b8c32ae9edc506359d2a2f630
 #include "Snake.h"
 #include "raylib.h"
 
@@ -186,9 +191,9 @@ void GameController::Update() {
     checkCollisionWithLengthApple();
     checkCollisionWithSlowApple();
     checkCollisionWithDecreaseBanana();
-    checkCollisionWithEdges(cellNum);
     checkCollisionWithHead();
-}
+    checkCollisionWithEdges(cellNum);
+  }
 }
 
 void GameController::GameOver(int cellNum) {
@@ -200,16 +205,18 @@ void GameController::GameOver(int cellNum) {
   spawnDecreaseBanana();
 
   isRunning = false;
-  score = 0;
   lastSpawnTime = GetTime();  // Resets spawn timer
 }
 
+<<<<<<< HEAD
 //Delete snake part -------------------------------------------------------------------------------------------------------
 void GameController::DecreaseSnake(int _DecreaseAmount){
   
 }
 
 
+=======
+>>>>>>> 64d81f2a9ee6373b8c32ae9edc506359d2a2f630
 // Managing Collisions
 void GameController::checkCollisionWithLengthApple() {
   for (int i = 0; i < lengthApples.size(); i++) {
@@ -228,7 +235,7 @@ void GameController::checkCollisionWithSlowApple() {
         (snake.getBody()[0].y == slowApples[i]->getPosition().y)) {
       slowApples[i]->setPosition(
           slowApples[i]->GenerateRandomPos(cellNum, snake));
-      snake.applySlowEffect(3.0f); //Changes length of effect
+      snake.applySlowEffect(3.0f);  // Changes length of effect
 
       // Delete slowApple
       delete slowApples[i];
@@ -247,16 +254,16 @@ void GameController::checkCollisionWithSlowApple() {
         (snake.getBody()[0].y == DecreaseBananas[i]->getPosition().y)) {
       DecreaseBananas[i]->setPosition(
           DecreaseBananas[i]->GenerateRandomPos(cellNum, snake));
-        snake.setPushBack(true);
-        score++;
+        snake.setSubtractSegment(true);
+        score = score - 1;
       
 
-      // Delete slowApple
+      // Delete DecreaseBananas
       delete DecreaseBananas[i];
       // removes pointer and shifts remaining elements to fill the gap
       DecreaseBananas.erase(DecreaseBananas.begin() + i);
 
-      // Spawn a new apple
+      // Spawn a new Banana
       spawnDecreaseBanana();
       break;
     }
@@ -445,4 +452,4 @@ void GameController::removeBanana(){
 }
 
 // Destructor--------------------------------------------------------------------------------------------------------
-GameController::~GameController() { removeApples(); } // remove banana?
+GameController::~GameController() { removeApples(); removeBanana();} 

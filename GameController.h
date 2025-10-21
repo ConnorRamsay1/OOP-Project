@@ -11,6 +11,10 @@
 #include "IncreaseLengthApple.h"
 #include "SlowingApple.h"
 #include "Snake.h"
+#include "IncreaseLengthApple.h"
+#include "SlowingApple.h"
+#include "DecreaseLengthBanana.h"
+#include "Banana.h"
 #include "raylib.h"
 
 

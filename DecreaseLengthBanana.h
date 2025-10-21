@@ -13,25 +13,23 @@ using namespace std;
 class SlowingApple;
 
 
-class DecreaseLengthBanana : public virtual Fruit, public Banana{
+class DecreaseLengthBanana : public Banana{
 private:
 int _DecreaseAmount;
 
 public:
  // Constructors--------------------------------------------------------------------------------------------------
   DecreaseLengthBanana();
-  DecreaseLengthBanana(Color color, Vector2 position, int );
+  DecreaseLengthBanana(Color color1,Color color2, Vector2 position, int _DecreaseAmount);
 
   // Behaviours--------------------------------------------------------------------------------------------------
   // Getters--------------------------------------------------------------------------------------------------
-  Color getColor() override;
+  int getDecreaseAmount();
   Vector2 getPosition() override;
-  int getDecreaseAmount(int _DecreaseAmount);
 
   // Setters--------------------------------------------------------------------------------------------------
-  void setColor(Color color) override;
+  void setDecreaseAmount(int _DecreaseAmount);  
   void setPosition(Vector2 position) override;
-  void setDecreaseAmount(int _DecreaseAmount);
 
   // Drawing Object & Generating Object Position
   void draw(int cellSize) override;

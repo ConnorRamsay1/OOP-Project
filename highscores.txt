@@ -1,0 +1,10 @@
+Give,4,Hard
+Us,2,Easy
+A,2,Easy
+HD,2,Easy
+Please,2,Easy
+and,2,Medium
+Thankyou,2,Medium
+You,1,Medium
+Absolute,0,Medium
+Legend,0,Medium

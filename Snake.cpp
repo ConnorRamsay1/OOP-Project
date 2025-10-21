@@ -10,7 +10,7 @@ using namespace std;
 // Constructors----------------------------------------------------------------------------------------------
 Snake::Snake(deque<Vector2> body, Vector2 direction, bool addSegment,
              Color color, bool isSlowed, double slowEffectTime,
-             float normalSpeed, float slowedSpeed) {
+             float normalSpeed, float slowedSpeed, bool subtractSegment) {
   this->body = body;
   this->direction = direction;
   this->addSegment = addSegment;
@@ -19,11 +19,13 @@ Snake::Snake(deque<Vector2> body, Vector2 direction, bool addSegment,
   this->slowEffectTime = slowEffectTime;
   this->normalSpeed = normalSpeed;
   this->slowedSpeed = slowedSpeed;
+  this->subtractSegment = subtractSegment;
 }
 Snake::Snake() {
   this->body = {Vector2{6, 9}, Vector2{5, 9}, Vector2{4, 9}};
   this->direction = {1, 0};
   this->addSegment = false;
+  this->subtractSegment = false;
   this->color = {0, 100, 0, 255};
   this->isSlowed = false;
   this->slowEffectTime = 0;
@@ -35,10 +37,10 @@ Snake::Snake() {
 // Getters
 Color Snake::getColor() { return color; }
 bool Snake::getAddSegment() { return addSegment; }
+bool Snake::getSubtractSegment() {return subtractSegment; }
 Vector2 Snake::getDirection() { return direction; }
 const deque<Vector2>& Snake::getBody() const { return body; }
 bool Snake::getIsSlowed() { return isSlowed; }
-bool Snake::getPushBack() { return PushBack; }
 
 // Setters
 void Snake::setColor(Color color) {
@@ -47,10 +49,6 @@ void Snake::setColor(Color color) {
 }
 void Snake::setAddSegment(bool addSegment) {
   this->addSegment = addSegment;
-  return;
-}
-void Snake::setPushBack(bool PushBack){
-  this->PushBack = PushBack;
   return;
 }
 void Snake::setDirection(Vector2 direction) {
@@ -64,6 +62,9 @@ void Snake::setBody(deque<Vector2> body) {
 void Snake::setIsSlowed(bool isSlowed) {
   this->isSlowed = isSlowed;
   return;
+}
+void Snake::setSubtractSegment(bool subtractSegment){
+  this->subtractSegment = subtractSegment;
 }
 // User Interface and
 // Interactions----------------------------------------------------------------------------
@@ -98,10 +99,11 @@ void Snake::Update() {
     body.pop_back();
     body.push_front(newHead);
   }
-  if(PushBack == true){
+  if(subtractSegment == true){
     body.pop_back();
     PushBack = false;
   }
+
 
 }
 

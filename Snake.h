@@ -18,6 +18,7 @@ class Snake {
   bool addSegment;
   Color color;
   bool PushBack;
+  bool subtractSegment;
 
   // For slowed Effect
   bool isSlowed;
@@ -29,22 +30,22 @@ class Snake {
   // Contructors------------------------------------------------------------------------------------------
   Snake(deque<Vector2> body, Vector2 direction, bool addSegment, Color color,
         bool isSlowed, double slowEffectTime, float normalSpeed,
-        float slowedSpeed);
+        float slowedSpeed, bool subtractSegment);
   Snake();
 
   // Behaviours----------------------------------------------------------------------------------------------
   // Getters
   Vector2 getDirection();
+  bool getSubtractSegment();
   bool getAddSegment();
   Color getColor();
   const deque<Vector2>& getBody() const;
   bool getIsSlowed();
-  bool getPushBack();
-
+  
   // Setters
   void setColor(Color color);
   void setAddSegment(bool addSegment);
-  void setPushBack(bool PushBack);
+  void setSubtractSegment(bool subtractSegment);
   void setDirection(Vector2 direction);
   void setBody(deque<Vector2> body);
   void setIsSlowed(bool isSlowed);
