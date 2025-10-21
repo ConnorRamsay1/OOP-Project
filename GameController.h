@@ -1,4 +1,4 @@
-//Game Controller HEADER FILE
+// Game Controller HEADER FILE
 
 #ifndef GAMECONTROLLER_H
 #define GAMECONTROLLER_H
@@ -7,16 +7,13 @@
 #include <iostream>
 #include <vector>
 
+#include "Banana.h"
+#include "DecreaseLengthBanana.h"
 #include "Fruit.h"
 #include "IncreaseLengthApple.h"
 #include "SlowingApple.h"
 #include "Snake.h"
-#include "IncreaseLengthApple.h"
-#include "SlowingApple.h"
-#include "DecreaseLengthBanana.h"
-#include "Banana.h"
 #include "raylib.h"
-
 
 class DecreaseLengthBanana;
 using namespace std;
@@ -42,8 +39,7 @@ class GameController {
   double lastSpawnTime;
   float spawnRate;
 
-
-  //Protected attributes
+  // Protected attributes
   int cellSize;
   int cellNum;
 
@@ -117,7 +113,7 @@ class GameController {
   void spawnDecreaseBanana();
   void removeBanana();
 
-  //effect of decrease Banana
+  // effect of decrease Banana
   void DecreaseSnake(int _DecreaseAmount);
 
   // Destructor-----------------------------------------------------------------

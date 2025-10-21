@@ -14,7 +14,7 @@
 using namespace std;
 
 // Contructors----------------------------------------------------------------------------------------------
-GameController::GameController(){
+GameController::GameController() {
   snake = Snake();
   lastInputTime = 0;
   inputCooldown = 0.1f;
@@ -172,17 +172,17 @@ void GameController::HandleInput(Vector2& direction) {
 
 void GameController::draw(int cellSize) {
   snake.draw(cellSize);
- for (int i = 0; i < lengthApples.size(); i++) {
+  for (int i = 0; i < lengthApples.size(); i++) {
     lengthApples[i]->draw(cellSize);
-}
+  }
   for (int i = 0; i < slowApples.size(); i++) {
     slowApples[i]->draw(cellSize);
   }
   for (int i = DecreaseBananas.size() - 1; i >= 0; i--) {
     if (DecreaseBananas[i]) {
-        DecreaseBananas[i]->draw(cellSize);
+      DecreaseBananas[i]->draw(cellSize);
     }
-}
+  }
 }
 
 void GameController::Update() {
@@ -393,7 +393,7 @@ void GameController::spawnSlowApple() {
   slowApples.push_back(newApple);
 }
 
-void GameController::spawnDecreaseBanana(){
+void GameController::spawnDecreaseBanana() {
   if (DecreaseBananas.size() >= maxDecreaseBanana) {
     return;
   }
@@ -448,9 +448,8 @@ void GameController::spawnDecreaseBanana(){
 
   newBanana->setPosition(newBananaPosition);
   DecreaseBananas.push_back(newBanana);
-  
-  std::cout << "Spawned banana at: " 
-            << newBananaPosition.x << ", " 
+
+  std::cout << "Spawned banana at: " << newBananaPosition.x << ", "
             << newBananaPosition.y << std::endl;
 }
 
@@ -475,21 +474,21 @@ void GameController::removeBanana() {
   DecreaseBananas.clear();
 }
 
-void GameController::resetGame(){
+void GameController::resetGame() {
   removeApples();
-    removeBanana();
-    score = 0;
-    isRunning = true;
-    snake.Reset();
-    lastSpawnTime = GetTime();
-    
-    for (int i = 0; i < maxLengthApples; i++) spawnLengthApple();
-    for (int i = 0; i < maxSlowApples; i++) spawnSlowApple();
-    for (int i = 0; i < maxDecreaseBanana; i++) spawnDecreaseBanana();
+  removeBanana();
+  score = 0;
+  isRunning = true;
+  snake.Reset();
+  lastSpawnTime = GetTime();
+
+  for (int i = 0; i < maxLengthApples; i++) spawnLengthApple();
+  for (int i = 0; i < maxSlowApples; i++) spawnSlowApple();
+  for (int i = 0; i < maxDecreaseBanana; i++) spawnDecreaseBanana();
 }
 
 // Destructor--------------------------------------------------------------------------------------------------------
 GameController::~GameController() {
-  //removeApples();
-  //removeBanana();
+  // removeApples();
+  // removeBanana();
 }

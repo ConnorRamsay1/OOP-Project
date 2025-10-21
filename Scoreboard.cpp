@@ -109,8 +109,7 @@ void Scoreboard::draw(int screenWidth, int screenHeight) {
   int spacing = 45;
 
   if (highscores.empty()) {
-    DrawText("No high scores Yet!", screenWidth / 2 - 100, positionY, 25,
-             GRAY);
+    DrawText("No high scores Yet!", screenWidth / 2 - 100, positionY, 25, GRAY);
     return;
   }
   int count = min(10, (int)highscores.size());

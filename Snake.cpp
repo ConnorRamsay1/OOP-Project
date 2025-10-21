@@ -1,9 +1,10 @@
-//Snake Implementation File
+// Snake Implementation File
+
+#include "Snake.h"
 
 #include <deque>
 #include <iostream>
 
-#include "Snake.h"
 #include "DecreaseLengthBanana.h"
 
 using namespace std;
@@ -38,7 +39,7 @@ Snake::Snake() {
 // Getters
 Color Snake::getColor() { return color; }
 bool Snake::getAddSegment() { return addSegment; }
-bool Snake::getSubtractSegment() {return subtractSegment; }
+bool Snake::getSubtractSegment() { return subtractSegment; }
 Vector2 Snake::getDirection() { return direction; }
 const deque<Vector2>& Snake::getBody() const { return body; }
 bool Snake::getIsSlowed() { return isSlowed; }
@@ -64,7 +65,7 @@ void Snake::setIsSlowed(bool isSlowed) {
   this->isSlowed = isSlowed;
   return;
 }
-void Snake::setSubtractSegment(bool subtractSegment){
+void Snake::setSubtractSegment(bool subtractSegment) {
   this->subtractSegment = subtractSegment;
 }
 // User Interface and
@@ -91,14 +92,14 @@ void Snake::draw(int cellSize) {
   }
 }
 
-void Snake::removeSegments(int amount){
+void Snake::removeSegments(int amount) {
   if (amount >= body.size()) {
-        body.clear();
-    } else {
-        for (int i = 0; i < amount; i++) {
-            body.pop_back();
-        }
+    body.clear();
+  } else {
+    for (int i = 0; i < amount; i++) {
+      body.pop_back();
     }
+  }
 }
 
 void Snake::Update() {
@@ -113,8 +114,6 @@ void Snake::Update() {
     body.pop_back();
     body.push_front(newHead);
   }
-
-
 }
 
 void Snake::Reset() {

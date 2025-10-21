@@ -5,6 +5,7 @@
 
 #include <deque>
 #include <iostream>
+
 #include "raylib.h"
 
 using namespace std;
@@ -42,7 +43,7 @@ class Snake {
   Color getColor();
   const deque<Vector2>& getBody() const;
   bool getIsSlowed();
-  
+
   // Setters
   void setColor(Color color);
   void setAddSegment(bool addSegment);
@@ -60,8 +61,8 @@ class Snake {
   // Effects from Slow Apple
   void applySlowEffect(float duration);
   void updateSlowApple();
- //counter for banana
- void removeSegments(int amount);
+  // counter for banana
+  void removeSegments(int amount);
   // Destructor----------------------------------------------------------------------------------------------
   ~Snake();
 };

@@ -1,14 +1,15 @@
-//Slowing Apple Implementation File
+// Slowing Apple Implementation File
+
+#include "SlowingApple.h"
 
 #include <deque>
 #include <iostream>
 
-#include "SlowingApple.h"
 #include "Fruit.h"
 #include "Snake.h"
 #include "raylib.h"
 
-//Constructors-------------------------------------------------------------------
+// Constructors-------------------------------------------------------------------
 SlowingApple::SlowingApple(Color color, Vector2 position) {
   this->position = position;
   this->color = color;
@@ -24,8 +25,8 @@ SlowingApple::SlowingApple() {
   moveInterval = 0.5f;
 }
 
-//Behaviours--------------------------------------------------------------------
-// Getters----------------------------------------------------------------------
+// Behaviours--------------------------------------------------------------------
+//  Getters----------------------------------------------------------------------
 Color SlowingApple::getColor() { return color; }
 Vector2 SlowingApple::getPosition() { return position; }
 
@@ -33,7 +34,8 @@ Vector2 SlowingApple::getPosition() { return position; }
 void SlowingApple::setColor(Color color) { this->color = color; }
 void SlowingApple::setPosition(Vector2 position) { this->position = position; }
 
-//Drawing Object & Setting Object's Position---------------------------------------------------------------
+// Drawing Object & Setting Object's
+// Position---------------------------------------------------------------
 void SlowingApple::draw(int cellSize) {
   DrawRectangle(position.x * cellSize, position.y * cellSize, cellSize,
                 cellSize, getColor());
@@ -49,4 +51,3 @@ Vector2 SlowingApple::GenerateRandomPos(int cellNum, const Snake& snake) {
   }
   return position;
 }
-

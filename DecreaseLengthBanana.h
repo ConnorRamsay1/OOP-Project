@@ -4,23 +4,23 @@
 #include <deque>
 #include <iostream>
 
+#include "Banana.h"
 #include "Fruit.h"
 #include "raylib.h"
-#include "Banana.h"
 
 using namespace std;
 
 class SlowingApple;
 
+class DecreaseLengthBanana : public Banana {
+ private:
+  int _DecreaseAmount;
 
-class DecreaseLengthBanana : public Banana{
-private:
-int _DecreaseAmount;
-
-public:
- // Constructors-------------c-------------------------------------------------------------------------------------
+ public:
+  // Constructors-------------c-------------------------------------------------------------------------------------
   DecreaseLengthBanana();
-  DecreaseLengthBanana(Color color1,Color color2, Vector2 position, int _DecreaseAmount);
+  DecreaseLengthBanana(Color color1, Color color2, Vector2 position,
+                       int _DecreaseAmount);
 
   // Behaviours--------------------------------------------------------------------------------------------------
   // Getters--------------------------------------------------------------------------------------------------
@@ -28,7 +28,7 @@ public:
   Vector2 getPosition() override;
 
   // Setters--------------------------------------------------------------------------------------------------
-  void setDecreaseAmount(int _DecreaseAmount);  
+  void setDecreaseAmount(int _DecreaseAmount);
   void setPosition(Vector2 position) override;
 
   // Drawing Object & Generating Object Position

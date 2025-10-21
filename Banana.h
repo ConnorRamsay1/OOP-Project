@@ -5,10 +5,10 @@
 
 class GameController;
 
-class Banana : public virtual Fruit{
-protected:
-Color _bananaYellow; 
-Color _bananaOutline; 
+class Banana : public virtual Fruit {
+ protected:
+  Color _bananaYellow;
+  Color _bananaOutline;
 
  public:
   // Constructors-----------------------
@@ -23,9 +23,7 @@ Color _bananaOutline;
   // Draw Banana---------------
   void BananaDraw(int cellsize, int cellnum, Color _bananaYellow,
                   Color _bananaOutline, Vector2 position);
-
 };
-//Desctructor------------------------------------------------------------------------
-
+// Desctructor------------------------------------------------------------------------
 
 #endif
