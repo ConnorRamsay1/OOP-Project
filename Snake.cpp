@@ -4,7 +4,7 @@
 
 #include <deque>
 #include <iostream>
-
+#include "Snake.h"
 #include "DecreaseLengthBanana.h"
 
 using namespace std;

@@ -40,6 +40,7 @@ TitlePage::TitlePage(int screenWidth, int screenHeight) {
 
 // Behaviours----------------------------------------------------------
 // Getters
+
 string TitlePage::getDifficultyString() const {
   if (currentDifficulty == EASY) {
     return "Easy";
@@ -274,7 +275,7 @@ void TitlePage::drawGameOverScreen(int finalScore, bool isHighScore) {
              DARKGRAY);
   }
 
-  DrawText("Press ESC for main menu", screenWidth / 2 - 130, 450, 25, DARKGRAY);
+  DrawText("Press T for main menu", screenWidth / 2 - 130, 450, 25, DARKGRAY);
 }
 
 // EntryNameScreen
@@ -304,7 +305,7 @@ void TitlePage::drawNameEntryScreen(int finalScore) {
   }
 
   DrawText("Press ENTER to save", screenWidth / 2 - 100, 400, 23, DARKGRAY);
-  DrawText("Press S to skip", screenWidth / 2 - 90, 435, 20, GRAY);
+  DrawText("Press T to skip", screenWidth / 2 - 90, 435, 20, GRAY);
 }
 
 // Handle Mouse Inputs & Navigating through game
@@ -367,10 +368,6 @@ GameState TitlePage::handleNameEntry(GameState currentState, int finalScore) {
 
     return TITLE;
   }
-
-  if (IsKeyPressed(KEY_S)) {
-    return TITLE;
-  }
   return ENTER_NAME;
 }
 
@@ -392,7 +389,7 @@ GameState TitlePage::handleTitleInput(GameState currentState) {
 GameState TitlePage::handlePageInput(GameState currentState) {
   Vector2 mouse = GetMousePosition();
 
-  // Back button or ESC returns to title
+  // Back button or T returns to title
   if (IsKeyPressed(KEY_T) || (IsMouseButtonPressed(MOUSE_LEFT_BUTTON) &&
                               CheckCollisionPointRec(mouse, backButton))) {
     return TITLE;

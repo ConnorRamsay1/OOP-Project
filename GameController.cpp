@@ -25,9 +25,9 @@ GameController::GameController() {
 
   // Apple Spawning
   // Max no. of Apples
-  maxLengthApples = 3;
-  maxSlowApples = 2;
-  maxDecreaseBanana = 2;
+  maxLengthApples = 7;
+  maxSlowApples = 4;
+  maxDecreaseBanana = 4;
   lastSpawnTime = 0;
   spawnRate = 3.0f;
 
@@ -448,9 +448,6 @@ void GameController::spawnDecreaseBanana() {
 
   newBanana->setPosition(newBananaPosition);
   DecreaseBananas.push_back(newBanana);
-
-  std::cout << "Spawned banana at: " << newBananaPosition.x << ", "
-            << newBananaPosition.y << std::endl;
 }
 
 void GameController::removeApples() {
