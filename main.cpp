@@ -54,7 +54,7 @@ int main(void) {
       titlePage.drawTitleScreen();
       currentState = titlePage.handleTitleInput(currentState);
       if (currentState == PLAY) {
-        game = GameController();  // Resets Game
+        game.resetGame();  // Resets Game
         lastUpdateTime = GetTime();
       }
 

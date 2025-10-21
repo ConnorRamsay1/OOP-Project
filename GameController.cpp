@@ -14,8 +14,8 @@
 using namespace std;
 
 // Contructors----------------------------------------------------------------------------------------------
-GameController::GameController() {
-  Snake snake;
+GameController::GameController(){
+  snake = Snake();
   lastInputTime = 0;
   inputCooldown = 0.1f;
   cellNum = 25;
@@ -172,15 +172,17 @@ void GameController::HandleInput(Vector2& direction) {
 
 void GameController::draw(int cellSize) {
   snake.draw(cellSize);
-  for (int i = 0; i < lengthApples.size(); i++) {
+ for (int i = 0; i < lengthApples.size(); i++) {
     lengthApples[i]->draw(cellSize);
-  }
+}
   for (int i = 0; i < slowApples.size(); i++) {
     slowApples[i]->draw(cellSize);
   }
-  for (int i = 0; i < DecreaseBananas.size(); i++) {
-    DecreaseBananas[i]->draw(cellSize);
-  }
+  for (int i = DecreaseBananas.size() - 1; i >= 0; i--) {
+    if (DecreaseBananas[i]) {
+        DecreaseBananas[i]->draw(cellSize);
+    }
+}
 }
 
 void GameController::Update() {
@@ -242,7 +244,8 @@ void GameController::checkCollisionWithDecreaseBanana() {
   for (int i = 0; i < DecreaseBananas.size(); i++) {
     if ((snake.getBody()[0].x == DecreaseBananas[i]->getPosition().x) &&
         (snake.getBody()[0].y == DecreaseBananas[i]->getPosition().y)) {
-      snake.setSubtractSegment(true);
+      int decreaseamount = DecreaseBananas[i]->getDecreaseAmount();
+      snake.removeSegments(decreaseamount);
       score = score + 1;
 
       // Delete DecreaseBananas
@@ -472,8 +475,21 @@ void GameController::removeBanana() {
   DecreaseBananas.clear();
 }
 
+void GameController::resetGame(){
+  removeApples();
+    removeBanana();
+    score = 0;
+    isRunning = true;
+    snake.Reset();
+    lastSpawnTime = GetTime();
+    
+    for (int i = 0; i < maxLengthApples; i++) spawnLengthApple();
+    for (int i = 0; i < maxSlowApples; i++) spawnSlowApple();
+    for (int i = 0; i < maxDecreaseBanana; i++) spawnDecreaseBanana();
+}
+
 // Destructor--------------------------------------------------------------------------------------------------------
 GameController::~GameController() {
-  removeApples();
-  removeBanana();
+  //removeApples();
+  //removeBanana();
 }

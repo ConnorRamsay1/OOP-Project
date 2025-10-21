@@ -19,6 +19,7 @@ class Snake {
   Color color;
   bool PushBack;
   bool subtractSegment;
+  int amount;
 
   // For slowed Effect
   bool isSlowed;
@@ -59,7 +60,8 @@ class Snake {
   // Effects from Slow Apple
   void applySlowEffect(float duration);
   void updateSlowApple();
-
+ //counter for banana
+ void removeSegments(int amount);
   // Destructor----------------------------------------------------------------------------------------------
   ~Snake();
 };

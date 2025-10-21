@@ -4,6 +4,7 @@
 #include <iostream>
 
 #include "Snake.h"
+#include "DecreaseLengthBanana.h"
 
 using namespace std;
 
@@ -90,17 +91,23 @@ void Snake::draw(int cellSize) {
   }
 }
 
+void Snake::removeSegments(int amount){
+  if (amount >= body.size()) {
+        body.clear();
+    } else {
+        for (int i = 0; i < amount; i++) {
+            body.pop_back();
+        }
+    }
+}
+
 void Snake::Update() {
   Vector2 newHead = {(body[0].x + direction.x), (body[0].y + direction.y)};
   if (addSegment == true) {
     body.push_front(newHead);
     addSegment = false;
   } else if (subtractSegment == true) {
-    body.push_front(newHead);
-    if (body.size() > 3) {  
-      body.pop_back(); 
-      body.pop_back();  
-    }
+    removeSegments(amount);
     subtractSegment = false;
   } else {
     body.pop_back();

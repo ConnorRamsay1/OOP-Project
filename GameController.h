@@ -107,6 +107,7 @@ class GameController {
   void Update();
   void HandleInput(Vector2& direction);
   void GameOver(int cellNum);
+  void resetGame();
 
   // Spawning Apples
   void spawnLengthApple();
