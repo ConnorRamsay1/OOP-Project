@@ -2,3 +2,7 @@ g++ main.cpp -o main \
   -I/usr/local/include \
   -L/usr/local/lib \
   -lraylib -lm -ldl -lpthread -lGL -lX11
+
+
+  Final compiler:
+  g++ -fsanitize=address -g GameController.cpp Fruit.cpp Banana.cpp main.cpp DecreaseLengthBanana.cpp TitlePage.cpp Scoreboard.cpp IncreaseLengthApple.cpp SlowingApple.cpp Snake.cpp -o Snake   -I/usr/local/include   -L/usr/local/lib   -lraylib -lm -ldl -lpthread -lGL -lX11 
