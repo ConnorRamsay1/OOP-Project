@@ -332,7 +332,7 @@ GameState TitlePage::handleDifficultyInput(GameState currentState) {
       return TITLE;
     }
   }
-  if (IsKeyPressed(KEY_S)) {
+  if (IsKeyPressed(KEY_T)) {
     return TITLE;
   }
   return DIFFICULTY;
@@ -342,7 +342,7 @@ GameState TitlePage::handleNameEntry(GameState currentState, int finalScore) {
   // Get character input
   int key = GetCharPressed();
   while (key > 0) {
-    // Only allow alphanumeric and space
+    // Only allow Alphabet Letters & Space
     if ((key >= 32) && (key <= 125) && (nameLength < 19)) {
       playerName[nameLength] = (char)key;
       playerName[nameLength + 1] = '\0';
