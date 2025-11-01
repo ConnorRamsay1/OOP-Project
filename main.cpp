@@ -33,7 +33,7 @@ int main(void) {
   const int screenWidth = 750;
   const int screenHeight = 750;
   InitWindow(screenWidth, screenHeight, "Snake Game");
-  SetTargetFPS(2);
+  SetTargetFPS(60);
 
   // Initialising Game State
   GameState currentState = TITLE;
